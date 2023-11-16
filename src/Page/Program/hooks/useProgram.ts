@@ -4,7 +4,7 @@ import { useProgramMutation } from ".";
 
 export const useProgram = () => {
   const programMutation = useProgramMutation();
-  const programs = useContext(ProgramContext);
+  const { programs, setSelectProgramContext } = useContext(ProgramContext);
 
-  return { programMutation, programs };
+  return { programMutation, programs, setSelectProgramContext };
 };

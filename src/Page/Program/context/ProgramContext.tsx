@@ -4,13 +4,9 @@ import { useProgramQuery } from "../hooks";
 
 const ProgramContext = createContext({});
 
-// interface ProgramContextProps {
-//   children: ReactNode;
-// }
-
 const ProgramProvider = ({ children }: { children: React.ReactNode }) => {
-  // const [selectProgram, setSelectProgram] = useState<null | ProgramModel>(null);
-
+  const [selectProgramContext, setSelectProgramContext] =
+    useState<null | ProgramModel>(null);
   const { data: programs, error, isLoading } = useProgramQuery();
 
   if (isLoading) {
@@ -22,7 +18,9 @@ const ProgramProvider = ({ children }: { children: React.ReactNode }) => {
   }
 
   return (
-    <ProgramContext.Provider value={programs}>
+    <ProgramContext.Provider
+      value={{ programs, selectProgramContext, setSelectProgramContext }}
+    >
       {children}
     </ProgramContext.Provider>
   );
