@@ -14,6 +14,7 @@ export const getProgramsByProgramming = async (id: number) => {
 export const createProgramming = async (programming: ProgrammingModel) => {
   try {
     const response = await axiosClient.post("/programming", programming);
+    console.log(response);
     return response.data;
   } catch (error) {
     console.error("Error creating program:", error);

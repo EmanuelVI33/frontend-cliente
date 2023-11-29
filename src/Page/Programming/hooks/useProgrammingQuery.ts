@@ -11,7 +11,7 @@ export const useProgrammingQuery = (id: number) => {
   });
 };
 
-export const useProgramMutation = () => {
+export const useProgrammingMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -19,4 +19,5 @@ export const useProgramMutation = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["programming"] });
     },
-  });f
+  });
+};

@@ -1,25 +1,29 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import { ProgramModel } from "../model";
-import { useProgramQuery } from "../hooks";
 
 const ProgramContext = createContext({});
 
+const LOCAL_STORAGE_KEY = "selectedProgram";
+
 const ProgramProvider = ({ children }: { children: React.ReactNode }) => {
-  const [selectProgramContext, setSelectProgramContext] =
-    useState<null | ProgramModel>(null);
-  const { data: programs, error, isLoading } = useProgramQuery();
+  const [program, setProgram] = useState<null | ProgramModel>(() => {
+    // Cargar el programa seleccionado desde el localStorage al inicio
+    const storedProgram = localStorage.getItem(LOCAL_STORAGE_KEY);
+    return storedProgram ? JSON.parse(storedProgram) : null;
+  });
 
-  if (isLoading) {
-    return <p>Cargando.....</p>;
-  }
-
-  if (error) {
-    return <p>Error al cargar los programas</p>;
-  }
+  useEffect(() => {
+    if (program) {
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(program));
+    }
+  }, [program]);
 
   return (
     <ProgramContext.Provider
-      value={{ programs, selectProgramContext, setSelectProgramContext }}
+      value={{
+        program,
+        setProgram,
+      }}
     >
       {children}
     </ProgramContext.Provider>

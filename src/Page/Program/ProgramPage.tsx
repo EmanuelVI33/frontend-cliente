@@ -1,10 +1,8 @@
-import { useRef, useState } from "react";
 import styled from "styled-components";
 import ReactModal from "react-modal";
 import { ProgramModel } from "./model";
 import { useProgram } from "./hooks";
 import { ProgramCard } from "./components";
-import { useNavigate } from "react-router-dom";
 
 // Estilos de los componentes
 const Container = styled.div`
@@ -24,53 +22,16 @@ const ModalContainer = styled.div`
 `;
 
 export default function ProgramPage() {
-  const [selectedProgram, setSelectedProgram] = useState<ProgramModel | null>(
-    null
-  );
-  // const [isConfirmationModalOpen, setConfirmationModalOpen] = useState(false);
-  const nameRef = useRef<HTMLInputElement>(null);
-  const durationRef = useRef<HTMLInputElement>(null);
-  const navigate = useNavigate();
-  const { programMutation, programs, setSelectProgramContext } = useProgram();
-
-  const handleCreateProgram = () => {
-    const name = nameRef.current?.value;
-    const duration = Number(durationRef.current?.value);
-
-    if (!name || !duration) return;
-
-    programMutation.mutate({
-      name,
-      duration,
-    });
-
-    // Limpiar el formulario después de crear un programa
-    if (nameRef.current) nameRef.current.value = "";
-    if (durationRef.current) durationRef.current.value = "";
-  };
-
-  const handleConfirmation = () => {
-    if (!selectedProgram) return;
-
-    // setConfirmationModalOpen(false);
-    const { id } = selectedProgram;
-    setSelectProgramContext(selectedProgram); // Almacenar el programa seleccionado
-    setSelectedProgram(null);
-    navigate(`/program/${id}`);
-  };
-
-  const closeConfirmationModal = () => {
-    // setConfirmationModalOpen(false);
-    setSelectedProgram(null);
-  };
-
-  const handleProgramClick = (program: ProgramModel) => {
-    setSelectedProgram(program);
-  };
-
-  const closeModal = () => {
-    setSelectedProgram(null);
-  };
+  const {
+    selectedProgram,
+    handleCreateProgram,
+    handleProgramClick,
+    handleConfirmation,
+    closeModal,
+    nameRef,
+    durationRef,
+    programs,
+  } = useProgram();
 
   return (
     <Container>
@@ -123,7 +84,7 @@ export default function ProgramPage() {
             <p>{`¿Quieres abrir el programa ${selectedProgram.name}?`}</p>
             <div>
               <button onClick={handleConfirmation}>Sí</button>
-              <button onClick={closeConfirmationModal}>No</button>
+              <button onClick={closeModal}>No</button>
             </div>
           </ModalContainer>
         )}

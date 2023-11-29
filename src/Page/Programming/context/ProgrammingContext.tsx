@@ -1,32 +1,31 @@
-import { createContext, useContext } from "react";
-import { useProgrammingQuery } from "../hooks";
-import { ProgramContext } from "@/Page/Program/context";
+import { createContext, useEffect, useState } from "react";
+import { ProgrammingModel } from "../model/ProgrammingModel";
 
 const ProgrammingContext = createContext({});
 
+const LOCAL_STORAGE_KEY = "selectedProgramming";
+
 const ProgrammingProvider = ({ children }: { children: React.ReactNode }) => {
-  const { selectProgramContext: selectProgram } = useContext(ProgramContext);
+  const [programming, setProgramming] = useState<null | ProgrammingModel>(
+    () => {
+      const storedProgramming = localStorage.getItem(LOCAL_STORAGE_KEY);
+      return storedProgramming ? JSON.parse(storedProgramming) : null;
+    }
+  );
 
-  console.log(selectProgram);
-
-  const {
-    data: programming = [],
-    error,
-    isLoading,
-  } = useProgrammingQuery(selectProgram.id); // Obtener programa con programming
-
-  console.log(programming);
-
-  if (isLoading) {
-    return <p>Cargando.....</p>;
-  }
-
-  if (error) {
-    return <p>Error al cargar los programas</p>;
-  }
+  useEffect(() => {
+    if (programming) {
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(programming));
+    }
+  }, [programming]);
 
   return (
-    <ProgrammingContext.Provider value={{ programming }}>
+    <ProgrammingContext.Provider
+      value={{
+        programming,
+        setProgramming,
+      }}
+    >
       {children}
     </ProgrammingContext.Provider>
   );

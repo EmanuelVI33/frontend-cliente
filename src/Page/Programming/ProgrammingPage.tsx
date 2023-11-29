@@ -1,9 +1,9 @@
 import styled from "styled-components";
-import { useProgramming } from "./hooks";
 import { ProgrammingModel } from "./model/ProgrammingModel";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import ReactModal from "react-modal";
-import { useState } from "react";
+import { ProgrammingProvider } from "./context/ProgrammingContext";
+import { useProgramming } from "./hooks/useProgramming";
 
 const Container = styled.div`
   margin: 0 auto;
@@ -41,22 +41,17 @@ const ModalContainer = styled.div`
 `;
 
 export default function ProgrammingPage() {
-  const { programming } = useProgramming();
-  const [selectedProgramming, setSelectedProgramming] =
-    useState<ProgrammingModel | null>(null);
-  const navigate = useNavigate();
-
-  const closeModal = () => {
-    setSelectedProgramming(null);
-  };
-
-  const handleProgramClick = (program: ProgramModel) => {
-    setSelectedProgramming(program);
-  };
-
-  const handleOpenProgramming = (id: number) => {
-    navigate(`programming/${id}/guion`);
-  };
+  const {
+    programming,
+    titleRef,
+    turnRef,
+    startTimeRef,
+    selectedProgramming,
+    handleProgrammingClick,
+    handleCreateProgramming,
+    handleClose,
+    handleConfirmation,
+  } = useProgramming();
 
   return (
     <Container>
@@ -67,7 +62,7 @@ export default function ProgrammingPage() {
             <ProgrammingButton
               key={p.id}
               to={`/programming/${p.id}`}
-              onClick={() => handleProgramClick(p)}
+              onClick={() => handleProgrammingClick(p)}
             >
               <ProgrammingItem>
                 <p>{p.title}</p>
@@ -80,9 +75,27 @@ export default function ProgrammingPage() {
         )}
       </ProgrammingList>
 
+      <div>
+        <h2>Crear Nueva Programacción</h2>
+
+        <div>
+          <input type="text" placeholder="Nombre del programa" ref={titleRef} />
+
+          <input
+            type="number"
+            placeholder="Turno de la proframación"
+            ref={turnRef}
+          />
+
+          <input type="date" placeholder="Hora de inicio" ref={startTimeRef} />
+
+          <button onClick={handleCreateProgramming}>Crear Programa</button>
+        </div>
+      </div>
+
       <ReactModal
         isOpen={!!selectedProgramming}
-        onRequestClose={closeModal}
+        onRequestClose={handleClose}
         contentLabel="Detalles del Programa"
         style={{
           content: {
@@ -95,11 +108,11 @@ export default function ProgrammingPage() {
       >
         {selectedProgramming && (
           <ModalContainer>
-            <p>{`¿Quieres abrir el programa ${selectedProgramming.name}?`}</p>
-            {/* <div>
+            <p>{`¿Quieres abrir el programacción ${selectedProgramming.title}?`}</p>
+            <div>
               <button onClick={handleConfirmation}>Sí</button>
-              <button onClick={closeConfirmationModal}>No</button>
-            </div> */}
+              <button onClick={handleClose}>No</button>
+            </div>
           </ModalContainer>
         )}
       </ReactModal>
