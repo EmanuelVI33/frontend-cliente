@@ -1,0 +1,13 @@
+.container-timeline {
+  grid-column: 1 / 3; /* Ocupar ambas columnas */
+  grid-row: 2 / 3; /* Ocupar la segunda fila */
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: space-evenly;
+  overflow-x: auto;
+}
+
+.timeline {
+  height: 100%;
+}
