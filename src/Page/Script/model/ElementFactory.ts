@@ -1,44 +1,36 @@
-import { Element } from "./Element";
 import {
+  ElementModel,
   ImagenModel,
   MusicModel,
   PresenterVideoModel,
-} from "./ElementInterface";
+  VideoModel,
+} from ".";
+import { ElementEnum } from "./ElementEnum";
 
-import { Element } from "./Element";
-import {
-  ImagenModel,
-  MusicModel,
-  PresenterVideoModel,
-} from "./ElementInterface";
+interface ElementOptions {
+  [key: string]: any;
+}
 
-export type ElementType = "imagen" | "music" | "presenterVideo";
-
+// Implementación de la fábrica concreta
 export class ElementFactory {
-  static createElement(
-    id: number,
-    path: string,
-    index: number,
-    type: ElementType,
-    model: ImagenModel | MusicModel | PresenterVideoModel
-  ): Element {
-    switch (type) {
-      case "imagen":
-        return new Element(id, path, index, type, {
-          duration: (model as ImagenModel).duration,
-        });
-      case "music":
-        return new Element(id, path, index, type, {
-          name: (model as MusicModel).name,
-          author: (model as MusicModel).author,
-        });
-      case "presenterVideo":
-        return new Element(id, path, index, type, {
-          title: (model as PresenterVideoModel).title,
-          content: (model as PresenterVideoModel).content,
-        });
+  static createElement(options: ElementOptions): ElementModel {
+    switch (options.type) {
+      case ElementEnum.imagen:
+        return new ImagenModel(options.duration || 10);
+      case ElementEnum.music:
+        return new MusicModel(
+          options.name || "Song",
+          options.author || "Artist"
+        );
+      case ElementEnum.presenterVideo:
+        return new PresenterVideoModel(
+          options.title || "Presentation",
+          options.content || "Content"
+        );
+      case ElementEnum.video:
+        return new VideoModel();
       default:
-        throw new Error(`Invalid element type: ${type}`);
+        throw new Error("Tipo de elemento no válido");
     }
   }
 }

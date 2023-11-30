@@ -1,2 +1,2 @@
 export * from "./useScript";
-export * from "./useElementsContext";
+export * from "./useScriptContext";

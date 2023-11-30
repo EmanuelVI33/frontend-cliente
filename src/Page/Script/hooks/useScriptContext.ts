@@ -1,8 +1,8 @@
 import { useContext } from "react";
-import { ElementsContext } from "../context/ElementsContext";
+import { ScriptContext } from "../context";
 
-export const useElementsContext = () => {
-  const context = useContext(ElementsContext);
+export const useScriptContext = () => {
+  const context = useContext(ScriptContext);
   if (!context) {
     throw new Error("useElements debe usarse dentro de un ElementsProvider");
   }

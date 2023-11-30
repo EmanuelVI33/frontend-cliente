@@ -1,22 +1,20 @@
 import { FC, ReactNode, createContext, useEffect, useState } from "react";
-import { ElementInterface } from "../model";
+import { ElementModel } from "../model";
 
-interface ElementsContextProps {
-  elements: Element[];
+interface ScriptContextProps {
+  elements: ElementModel[];
   formData: Record<string, any>;
   setFormData: (data: string | any) => void;
-  addElement: (element: ElementInterface) => void;
+  addElement: (element: ElementModel) => void;
   removeElement: (id: number) => void;
-  editElement: (id: number, updatedElement: ElementInterface) => void;
-  findElement: (id: number) => ElementInterface | undefined;
+  editElement: (id: number, updatedElement: ElementModel) => void;
+  findElement: (id: number) => ElementModel | undefined;
 }
 
-const ElementsContext = createContext<ElementsContextProps | undefined>(
-  undefined
-);
+const ScriptContext = createContext<ScriptContextProps | undefined>(undefined);
 
-const ElementsProvider: FC<{ children: ReactNode }> = ({ children }) => {
-  const [elements, setElements] = useState<Element[]>([]);
+const ScriptProvider: FC<{ children: ReactNode }> = ({ children }) => {
+  const [elements, setElements] = useState<ElementModel[]>([]);
   const [formData, setFormData] = useState<Record<string, any>>({});
 
   useEffect(() => {
@@ -30,7 +28,7 @@ const ElementsProvider: FC<{ children: ReactNode }> = ({ children }) => {
     localStorage.setItem("elements", JSON.stringify(elements));
   }, [elements]);
 
-  const addElement = (element: ElementInterface) => {
+  const addElement = (element: ElementModel) => {
     setElements((prevElements) => [...prevElements, element]);
   };
 
@@ -40,7 +38,7 @@ const ElementsProvider: FC<{ children: ReactNode }> = ({ children }) => {
     );
   };
 
-  const editElement = (id: number, updatedElement: ElementInterface) => {
+  const editElement = (id: number, updatedElement: ElementModel) => {
     setElements((prevElements) =>
       prevElements.map((element) =>
         element.id === id ? updatedElement : element
@@ -52,7 +50,7 @@ const ElementsProvider: FC<{ children: ReactNode }> = ({ children }) => {
     elements.find((element) => element.id === id);
 
   return (
-    <ElementsContext.Provider
+    <ScriptContext.Provider
       value={{
         elements,
         formData,
@@ -64,8 +62,8 @@ const ElementsProvider: FC<{ children: ReactNode }> = ({ children }) => {
       }}
     >
       {children}
-    </ElementsContext.Provider>
+    </ScriptContext.Provider>
   );
 };
 
-export { ElementsContext, ElementsProvider };
+export { ScriptContext, ScriptProvider };

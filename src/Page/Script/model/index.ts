@@ -1,1 +1,1 @@
-export * from "./ElementInterface";
+export * from "./ElementModel";

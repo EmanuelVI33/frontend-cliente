@@ -1,6 +1,6 @@
 import { FC, useState } from "react";
 import styled from "styled-components";
-import { useElementsContext, useScript } from "../hooks";
+import { useScriptContext, useScript } from "../hooks";
 import { Button, TextField } from "@mui/material";
 
 interface FormField {
@@ -57,14 +57,26 @@ const SaveButton = styled.button`
 `;
 
 const FormElement: FC<FormElementProps> = ({ type, fields, onSave }) => {
-  const { formData, setFormData } = useElementsContext();
+  const { formData, setFormData } = useScriptContext();
 
   const handleChange = (fieldName: string, value: any) => {
     setFormData((prevData) => ({ ...prevData, [fieldName]: value }));
+    console.log(formData);
+  };
+
+  const handleFileChange = (
+    fieldName: string,
+    e: ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = e.target.files?.[0];
+
+    if (file) {
+      setFormData((prevData) => ({ ...prevData, [fieldName]: file }));
+    }
   };
 
   const handleSave = () => {
-    onSave(formData); // Pasa directamente el objeto formData al método onSave
+    onSave({ ...formData, type }); // Pasa directamente el objeto formData al método onSave
   };
 
   return (
@@ -72,14 +84,22 @@ const FormElement: FC<FormElementProps> = ({ type, fields, onSave }) => {
       <h2>{type}</h2>
       {fields.map((field) => (
         <Campo key={field.name}>
-          <TextField
-            id="outlined-basic"
-            label={field.label}
-            variant="standard"
-            type={field.type}
-            onChange={(e) => handleChange(field.name, e.target.value)}
-            fullWidth={true}
-          />
+          {field.type === "file" ? (
+            <input
+              type="file"
+              accept={field.accept}
+              onChange={(e) => handleFileChange(field.name, e)}
+            />
+          ) : (
+            <TextField
+              id="outlined-basic"
+              label={field.label}
+              variant="standard"
+              type={field.type}
+              onChange={(e) => handleChange(field.name, e.target.value)}
+              fullWidth={true}
+            />
+          )}
         </Campo>
       ))}
       <Button variant="outlined" onClick={handleSave}>

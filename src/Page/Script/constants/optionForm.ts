@@ -1,5 +1,7 @@
+import { ElementEnum } from "../model/ElementEnum";
+
 interface Option {
-  type: string;
+  type: ElementEnum;
   field: Array<{
     name: string;
     type: "text" | "number" | "file"; // Agrega más tipos según sea necesario
@@ -10,19 +12,19 @@ interface Option {
 
 export const options: Option[] = [
   {
-    type: "music",
+    type: ElementEnum.music,
     field: [
       { name: "name", type: "text", label: "Nombre" },
       { name: "author", type: "text", label: "Autor" },
-      { name: "audio", type: "file", label: "Audio", accept: "audio/*" },
+      { name: "path", type: "file", label: "Audio", accept: "audio/*" },
     ],
   },
   {
-    type: "imagen",
+    type: ElementEnum.imagen,
     field: [
       { name: "duration", type: "number", label: "Duración" },
       {
-        name: "imagen",
+        name: "path",
         type: "file",
         label: "Subir Imagén",
         accept: "imagen/*",
@@ -30,17 +32,17 @@ export const options: Option[] = [
     ],
   },
   {
-    type: "presenter",
+    type: ElementEnum.presenterVideo,
     field: [
       { name: "title", type: "text", label: "Título" },
       { name: "content", type: "text", label: "Contenido" },
     ],
   },
   {
-    type: "video",
+    type: ElementEnum.video,
     field: [
       { name: "title", type: "text", label: "Título" },
-      { name: "video", type: "file", label: "Subir video", accept: "video/*" },
+      { name: "path", type: "file", label: "Subir video", accept: "video/*" },
     ],
   },
 ];

@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { useElementsContext } from ".";
+import { useScriptContext } from ".";
+import { ElementEnum } from "../model/ElementEnum";
 
 export const useScript = () => {
-  const { elements, addElement } = useElementsContext();
+  const { elements, addElement } = useScriptContext();
   const [tipoFormulario, setTipoFormulario] = useState("music"); // Tipo de formulario actual
 
-  const handleChangeTab = (nuevoTipo: string) => {
+  const handleChangeTab = (nuevoTipo: ElementEnum) => {
     console.log(nuevoTipo);
     setTipoFormulario(nuevoTipo);
   };
