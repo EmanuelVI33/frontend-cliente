@@ -20,6 +20,7 @@ export const useProgramming = () => {
   const navigate = useNavigate();
 
   const handleProgrammingClick = (programming: ProgrammingModel) => {
+    console.log(programming.elements[0]);
     setSelectedProgramming(programming);
   };
 

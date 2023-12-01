@@ -1,6 +1,6 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 import styled from "styled-components";
-import { useScriptContext, useScript } from "../hooks";
+import { useScriptContext } from "../hooks";
 import { Button, TextField } from "@mui/material";
 
 interface FormField {
@@ -35,27 +35,6 @@ const Campo = styled.div`
   margin-bottom: 0.5rem;
 `;
 
-const LabelInput = styled.label`
-  display: block;
-  margin-bottom: 1rem;
-`;
-
-const Input = styled.input`
-  width: 100%;
-  padding: 12px;
-  box-sizing: border-box;
-  border: 1px solid #ccc; /* Añadir un borde */
-  border-radius: 4px; /* Añadir esquinas redondeadas */
-`;
-
-const SaveButton = styled.button`
-  background-color: #007bff;
-  color: #fff;
-  padding: 12px 16px;
-  cursor: pointer;
-  z-index: 0; /* Establecer un z-index inferior */
-`;
-
 const FormElement: FC<FormElementProps> = ({ type, fields, onSave }) => {
   const { formData, setFormData } = useScriptContext();
 
@@ -76,6 +55,7 @@ const FormElement: FC<FormElementProps> = ({ type, fields, onSave }) => {
   };
 
   const handleSave = () => {
+    console.log({ ...formData, type });
     onSave({ ...formData, type }); // Pasa directamente el objeto formData al método onSave
   };
 

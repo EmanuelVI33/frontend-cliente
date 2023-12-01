@@ -1,19 +1,37 @@
 import styled from "styled-components";
 import { FormElement, TabsButton } from ".";
 import { options } from "../constants";
-import { useScript } from "../hooks";
+import { useScript, useTimeLine } from "../hooks";
 import { ElementFactory } from "../model";
+import { ElementOptions } from "../model/ElementOptions";
+import { useElementMutation } from "../hooks/useElementService";
 
 const FormContainer = styled.div`
+  padding: 5px 5px;
+  background-color: #ececec;
+  border: 2px solid #ccc;
   grid-column: 1 / 2; /* Ocupar la primera columna */
   grid-row: 1 / 2; /* Ocupar ambas filas */
+  overflow-y: auto;
 `;
 
 export function Form() {
   const { tipoFormulario, handleChangeTab, addElement } = useScript();
-  const handleSave = (data) => {
-    const newElement = ElementFactory.createElement(data);
-    newElement.path = data.path;
+  const { elements } = useTimeLine();
+  const { mutate: createNewElement } = useElementMutation();
+
+  const handleSave = (data: ElementOptions) => {
+    const index = elements.length;
+
+    console.log(`Desde form ${{ ...data, index }}`);
+    // Crear element
+    const newElement = ElementFactory.createElement({ ...data, index });
+
+    // Query para agregar elemento
+    createNewElement({ ...data, index });
+
+    // const e = ElementFactory.createElement(response);
+
     addElement(newElement);
   };
 

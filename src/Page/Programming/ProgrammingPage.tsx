@@ -53,6 +53,8 @@ export default function ProgrammingPage() {
     handleConfirmation,
   } = useProgramming();
 
+  console.log(programming);
+
   return (
     <Container>
       <h1>Programaciones</h1>

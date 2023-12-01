@@ -1,16 +1,17 @@
 import { FC, ReactNode, createContext, useEffect, useState } from "react";
 import { ElementFactory, ElementModel } from "../model";
+import { ElementOptions } from "../model/ElementOptions";
 
 interface ScriptContextProps {
   elements: ElementModel[];
   formData: Record<string, any>;
-  selectedElement: number | null;
+  selectedElement: ElementModel | null;
   setFormData: (data: string | any) => void;
   addElement: (element: ElementModel) => void;
   removeElement: (id: number) => void;
   editElement: (id: number, updatedElement: ElementModel) => void;
   findElement: (id: number) => ElementModel | undefined;
-  setSelectedElement: (id: number | null) => void;
+  setSelectedElement: (id: ElementModel | null) => void;
 }
 
 const ScriptContext = createContext<ScriptContextProps | undefined>(undefined);
@@ -30,13 +31,29 @@ const ScriptProvider: FC<{ children: ReactNode }> = ({ children }) => {
   });
 
   // Estado par seleccionar elemento
-  const [selectedElement, setSelectedElement] = useState<number | null>(null);
+  const [selectedElement, setSelectedElement] = useState<ElementModel | null>(
+    null
+  );
 
-  const [formData, setFormData] = useState<Record<string, any>>({});
+  const [formData, setFormData] = useState<ElementOptions>({});
 
   useEffect(() => {
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(elements));
+    const elementsToStore = elements.map((element, index) => {
+      // Mapear el elemento según tus necesidades
+
+      const e = element.getAllAttributes();
+      console.log(`Elemento [${index}]: ${e.duration}`);
+
+      return e;
+    });
+
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(elementsToStore));
   }, [elements]);
+
+  // useEffect(() => {
+
+  //   localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(elements));
+  // }, [elements]);
 
   const addElement = (element: ElementModel) => {
     setElements((prevElements) => [...prevElements, element]);

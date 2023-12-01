@@ -16,7 +16,7 @@ export const options: Option[] = [
     field: [
       { name: "name", type: "text", label: "Nombre" },
       { name: "author", type: "text", label: "Autor" },
-      { name: "path", type: "file", label: "Audio", accept: "audio/*" },
+      { name: "file", type: "file", label: "Audio", accept: "audio/*" },
     ],
   },
   {
@@ -24,7 +24,7 @@ export const options: Option[] = [
     field: [
       { name: "duration", type: "number", label: "Duración" },
       {
-        name: "path",
+        name: "file",
         type: "file",
         label: "Subir Imagén",
         accept: "imagen/*",
@@ -41,8 +41,8 @@ export const options: Option[] = [
   {
     type: ElementEnum.video,
     field: [
-      { name: "title", type: "text", label: "Título" },
-      { name: "path", type: "file", label: "Subir video", accept: "video/*" },
+      // { name: "title", type: "text", label: "Título" },
+      { name: "file", type: "file", label: "Subir video", accept: "video/*" },
     ],
   },
 ];

@@ -6,29 +6,19 @@ import {
   VideoModel,
 } from ".";
 import { ElementEnum } from "./ElementEnum";
+import { ElementOptions } from "./ElementOptions";
 
-interface ElementOptions {
-  [key: string]: any;
-}
-
-// Implementación de la fábrica concreta
 export class ElementFactory {
   static createElement(options: ElementOptions): ElementModel {
     switch (options.type) {
       case ElementEnum.imagen:
-        return new ImagenModel(options.duration || 10);
+        return new ImagenModel(options);
       case ElementEnum.music:
-        return new MusicModel(
-          options.name || "Song",
-          options.author || "Artist"
-        );
+        return new MusicModel(options);
       case ElementEnum.presenterVideo:
-        return new PresenterVideoModel(
-          options.title || "Presentation",
-          options.content || "Content"
-        );
+        return new PresenterVideoModel(options);
       case ElementEnum.video:
-        return new VideoModel();
+        return new VideoModel(options);
       default:
         throw new Error("Tipo de elemento no válido");
     }
