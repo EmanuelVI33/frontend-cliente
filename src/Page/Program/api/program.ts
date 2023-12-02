@@ -3,9 +3,7 @@ import { ProgramModel } from "@/Page/Program/model";
 
 export const createProgram = async (program: ProgramModel) => {
   try {
-    console.log(ProgramModel);
     const response = await axiosClient.post("/program", program);
-    console.log(response.data);
     return response.data;
   } catch (error) {
     console.error("Error creating program:", error);

@@ -12,7 +12,7 @@ export const useProgram = () => {
   const durationRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
   const { mutate: createProgram } = useProgramMutation();
-  const { data: programs } = useProgramQuery();
+  const { data: programs, isLoading, isError } = useProgramQuery();
   const { setProgram } = useProgramContext();
 
   console.log(programs);

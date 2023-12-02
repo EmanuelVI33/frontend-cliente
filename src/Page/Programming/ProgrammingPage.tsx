@@ -95,6 +95,7 @@ export default function ProgrammingPage() {
         </div>
       </div>
 
+      {/* 
       <ReactModal
         isOpen={!!selectedProgramming}
         onRequestClose={handleClose}
@@ -117,7 +118,7 @@ export default function ProgrammingPage() {
             </div>
           </ModalContainer>
         )}
-      </ReactModal>
+      </ReactModal> */}
     </Container>
   );
 }

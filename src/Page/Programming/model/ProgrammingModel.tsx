@@ -9,11 +9,13 @@ export class ProgrammingModel {
   elements: ElementModel[];
 
   constructor(
+    id: number,
     title: string,
     turn: number,
     startTime: string,
     programId: number
   ) {
+    this.id = id;
     this.title = title;
     this.turn = turn;
     this.startTime = startTime;

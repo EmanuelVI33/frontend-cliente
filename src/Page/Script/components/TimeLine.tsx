@@ -1,7 +1,7 @@
 import styled from "styled-components";
-import { useTimeLine } from "../hooks";
+import { useScript, useTimeLine } from "../hooks";
 import "@/Page/Script/style/index.css";
-import { ElementModel } from "../model";
+import { ElementFactory, ElementModel } from "../model";
 
 const LineaTiempoButton = styled.button<{ selected: boolean }>`
   padding: 10px;
@@ -15,8 +15,8 @@ const LineaTiempoButton = styled.button<{ selected: boolean }>`
 `;
 
 export function TimeLine() {
-  const { elements, selectedElement, setSelectedElement } = useTimeLine();
-  // const {} = useProgrammin
+  const { selectedElement, setSelectedElement } = useTimeLine();
+  const { data, isLoading, isError } = useScript();
 
   const handleSelectElement = (element: ElementModel) => {
     const newElement =
@@ -25,19 +25,31 @@ export function TimeLine() {
     console.log(newElement);
   };
 
+  if (isLoading) {
+    return <p>Cargando</p>;
+  }
+
+  if (isError) {
+    return <p>Ocurrió un error</p>;
+  }
+
+  // Recorrer para crear la instancia correspondiente
+  const elements = data.map(ElementFactory.createElement);
+
   return (
     <div className="container-timeline">
       <button onClick={() => console.log("Holaaaaaaa")}>
         Generar Contenido
       </button>
       <div className="timeline">
-        {elements.map((element, index) => {
+        {elements.map((element: ElementModel, index: number) => {
           return (
             <LineaTiempoButton
               key={index}
-              selected={selectedElement?.index === index}
+              selected={selectedElement?.index === element.index}
               onClick={() => handleSelectElement(element)}
             >
+              {/* <p>{element.id}</p> */}
               {element.render()}
             </LineaTiempoButton>
           );
