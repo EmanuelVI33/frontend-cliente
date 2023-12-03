@@ -13,6 +13,7 @@ const FormContainer = styled.div`
 `;
 
 export function Form() {
+
   const { formType } = useScript();
 
   const fieldType = options.find((el) => el.type === formType)?.field || [];

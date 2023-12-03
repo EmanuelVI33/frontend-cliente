@@ -1,99 +1,66 @@
-import styled from "styled-components";
-import { ProgrammingModel } from "./model/ProgrammingModel";
-import { Link } from "react-router-dom";
-import ReactModal from "react-modal";
-import { ProgrammingProvider } from "./context/ProgrammingContext";
-import { useProgramming } from "./hooks/useProgramming";
+import React from "react";
+import { Link, useParams } from "react-router-dom";
+import { ArrowLeftOutlined, PlusOutlined } from "@ant-design/icons";
+import { FloatButton, List, Modal } from "antd";
 
-const Container = styled.div`
-  margin: 0 auto;
-  padding: 20px;
-`;
+import { PHeader } from "../../layout";
+import { ProgrammingCard, ProgrammingForm } from "./components";
 
-const ProgrammingList = styled.ul`
-  list-style: none;
-  padding: 0;
-`;
+import { useFormModal } from "./context";
 
-const ProgrammingButton = styled(Link)`
-  text-decoration: none;
-  color: inherit;
-`;
+const data = Array.from({ length: 4 }).map((_, i) => ({
+  id: i,
+  title: `Programacion ${i}`,
+  presenter: `https://create-images-results.d-id.com/DefaultPresenters/Toman_f_ai/image.jpeg`,
+  description:
+    "Ant Design, a design language for background applications, is refined by Ant UED Team.",
+  duration: "00:15:00",
+  turn: "Tarde",
+  startTime: `1${i}:00:00`,
+  programId: "82394820sda",
+}));
 
-const ProgrammingItem = styled.li`
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 16px;
-  margin-bottom: 16px;
-  width: 300px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  p {
-    margin: 8px 0;
-  }
-`;
-
-const ModalContainer = styled.div`
-  max-width: 200px;
-  margin: 0 auto;
-`;
-
-export default function ProgrammingPage() {
-  const {
-    programming,
-    titleRef,
-    turnRef,
-    startTimeRef,
-    selectedProgramming,
-    handleProgrammingClick,
-    handleCreateProgramming,
-    handleClose,
-    handleConfirmation,
-  } = useProgramming();
-
-  console.log(programming);
-
+const ProgrammingPage: React.FC = () => {
+  const { id } = useParams();
+  const { isAdd, isModalOpen, closeModal, openModal } = useFormModal();
   return (
-    <Container>
-      <h1>Programaciones</h1>
-      <ProgrammingList>
-        {programming ? (
-          programming.map((p: ProgrammingModel) => (
-            <ProgrammingButton
-              key={p.id}
-              to={`/programming/${p.id}`}
-              onClick={() => handleProgrammingClick(p)}
-            >
-              <ProgrammingItem>
-                <p>{p.title}</p>
-                <p>{p.turn}</p>
-              </ProgrammingItem>
-            </ProgrammingButton>
-          ))
-        ) : (
-          <p>No tienes programaciones</p>
-        )}
-      </ProgrammingList>
+    <>
+      <PHeader>
+        <Link to="/">
+          <ArrowLeftOutlined style={{ fontSize: 30 }} />{" "}
+        </Link>
 
-      <div>
-        <h2>Crear Nueva Programacción</h2>
-
-        <div>
-          <input type="text" placeholder="Nombre del programa" ref={titleRef} />
-
-          <input
-            type="number"
-            placeholder="Turno de la proframación"
-            ref={turnRef}
-          />
-
-          <input type="date" placeholder="Hora de inicio" ref={startTimeRef} />
-
-          <button onClick={handleCreateProgramming}>Crear Programa</button>
-        </div>
+        <span style={{ marginLeft: 20 }}> Programa: {id} </span>
+      </PHeader>
+      <div style={{ height: 20 }}></div>
+      <div style={{ maxWidth: 960, margin: "0 auto" }}>
+        <List
+          itemLayout="vertical"
+          dataSource={data}
+          renderItem={(item) => <ProgrammingCard item={item} />}
+        />
       </div>
-    </Container>
+      <FloatButton
+        icon={<PlusOutlined style={{ fontSize: 20 }} />}
+        type="primary"
+        style={{
+          right: 94,
+          width: 60,
+          height: 60,
+        }}
+        onClick={openModal}
+      />
+      <Modal
+        title={isAdd ? "Crear Nueva Programación" : "Editar Programación"}
+        open={isModalOpen}
+        onCancel={closeModal}
+        footer={null}
+      >
+        <ProgrammingForm />
+      </Modal>
+    </>
+
   );
-}
+};
+
+export default ProgrammingPage;

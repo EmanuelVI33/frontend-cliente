@@ -3,23 +3,32 @@ import { ElementModel } from "@/Page/Script/model";
 export class ProgrammingModel {
   id?: number;
   title: string;
-  turn: number;
+  turn: string;
   startTime: string;
-  programId: number;
-  elements: ElementModel[];
+  description: string;
+  duration: string;
+  presenter: string;
+  programId: string;
+  elements?: ElementModel[];
 
   constructor(
     id: number,
     title: string,
-    turn: number,
+    turn: string,
     startTime: string,
-    programId: number
+    description: string,
+    duration: string,
+    presenter: string,
+    programId: string
   ) {
     this.id = id;
     this.title = title;
     this.turn = turn;
     this.startTime = startTime;
     this.programId = programId;
+    this.description = description;
+    this.duration = duration;
+    this.presenter = presenter;
     this.elements = [];
   }
 }

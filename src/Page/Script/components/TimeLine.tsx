@@ -1,5 +1,7 @@
 import styled from "styled-components";
+
 import { useScript } from "../hooks";
+
 import "@/Page/Script/style/index.css";
 import { ElementFactory, ElementModel } from "../model";
 
@@ -15,6 +17,8 @@ const LineaTiempoButton = styled.button<{ selected: boolean }>`
 `;
 
 export function TimeLine() {
+
+
   const { selectedElement, setSelectedElement, data, isLoading, isError } =
     useScript();
 
@@ -49,6 +53,7 @@ export function TimeLine() {
               selected={selectedElement?.index === element.index}
               onClick={() => handleSelectElement(element)}
             >
+              {/* <p>{element.id}</p> */}
               {element.render()}
             </LineaTiempoButton>
           );
