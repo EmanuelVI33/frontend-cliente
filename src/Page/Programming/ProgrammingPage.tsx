@@ -94,31 +94,6 @@ export default function ProgrammingPage() {
           <button onClick={handleCreateProgramming}>Crear Programa</button>
         </div>
       </div>
-
-      {/* 
-      <ReactModal
-        isOpen={!!selectedProgramming}
-        onRequestClose={handleClose}
-        contentLabel="Detalles del Programa"
-        style={{
-          content: {
-            width: "60%",
-            height: "200px",
-            maxWidth: "300px",
-            margin: "auto",
-          },
-        }}
-      >
-        {selectedProgramming && (
-          <ModalContainer>
-            <p>{`¿Quieres abrir el programacción ${selectedProgramming.title}?`}</p>
-            <div>
-              <button onClick={handleConfirmation}>Sí</button>
-              <button onClick={handleClose}>No</button>
-            </div>
-          </ModalContainer>
-        )}
-      </ReactModal> */}
     </Container>
   );
 }

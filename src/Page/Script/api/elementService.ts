@@ -1,6 +1,6 @@
 import { axiosClient } from "@/constant";
 
-export const createElement = async (element: any) => {
+export const createElement = async (element: FormData) => {
   try {
     const response = await axiosClient.post("/element", element);
     console.log(response.data);

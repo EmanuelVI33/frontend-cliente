@@ -1,8 +1,7 @@
 import styled from "styled-components";
-import ReactModal from "react-modal";
-import { ProgramModel } from "./model";
 import { useProgram } from "./hooks";
-import { ProgramCard } from "./components";
+import { ProgramList } from "./components";
+import ReactModal from "react-modal";
 
 // Estilos de los componentes
 const Container = styled.div`
@@ -10,11 +9,11 @@ const Container = styled.div`
   padding: 20px;
 `;
 
-const CardContainer = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 16px;
-`;
+// const CardContainer = styled.div`
+//   display: grid;
+//   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+//   gap: 16px;
+// `;
 
 const ModalContainer = styled.div`
   max-width: 200px;
@@ -25,12 +24,10 @@ export default function ProgramPage() {
   const {
     selectedProgram,
     handleCreateProgram,
-    handleProgramClick,
     handleConfirmation,
     closeModal,
     nameRef,
     durationRef,
-    programs,
   } = useProgram();
 
   return (
@@ -38,7 +35,7 @@ export default function ProgramPage() {
       <h1>Programas</h1>
 
       {/* Lista de botones (ProgramCards) */}
-      <CardContainer>
+      {/* <CardContainer>
         {programs &&
           programs.map((program: ProgramModel) => (
             <ProgramCard
@@ -47,7 +44,8 @@ export default function ProgramPage() {
               onClick={() => handleProgramClick(program)}
             />
           ))}
-      </CardContainer>
+      </CardContainer> */}
+      <ProgramList />
 
       {/* Formulario para crear un nuevo programa */}
       <div>

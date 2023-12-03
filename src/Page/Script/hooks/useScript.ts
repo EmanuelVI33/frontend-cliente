@@ -1,38 +1,36 @@
 import { useScriptContext } from ".";
 import { useProgrammingContext } from "@/Page/Programming/hooks/useProgrammingContext";
 import { useElementQuery } from "./useElementService";
-import { ElementEnum, ElementFactory, ElementModel } from "../model";
-import { useState } from "react";
-
-// interface ScripProps {
-//   addElement: (element: ElementModel) => void;
-//   elemets: any;
-// }
+import { ElementEnum } from "../model";
 
 export const useScript = () => {
-  const [tipoFormulario, setTipoFormulario] = useState<ElementEnum>(
-    ElementEnum.imagen
-  );
-  const { addElement } = useScriptContext();
+  const {
+    selectedElement,
+    setSelectedElement,
+    formType,
+    setFormType,
+    data,
+    isLoading,
+    isError,
+  } = useScriptContext();
 
   // Obtener programming seleccionado
-  const { programming } = useProgrammingContext();
-  console.log(programming);
+  // const { programming } = useProgrammingContext();
 
-  const { data, isError, isLoading } = useElementQuery(programming.id);
+  // const { data, isError, isLoading } = useElementQuery(programming.id);
 
-  const handleChangeTab = (nuevoTipo: ElementEnum) => {
-    console.log(nuevoTipo);
-    setTipoFormulario(nuevoTipo);
+  const handleChangeTab = (newType: ElementEnum) => {
+    setFormType(newType);
   };
 
   return {
-    programming,
+    // programming,
     handleChangeTab,
-    tipoFormulario,
-    addElement,
     data,
     isError,
     isLoading,
+    selectedElement,
+    setSelectedElement,
+    formType,
   };
 };

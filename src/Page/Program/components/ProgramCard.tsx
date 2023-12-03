@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import { ProgramModel } from "../model";
+import { MouseEventHandler } from "react";
 
 const CardButton = styled.button`
   background-color: #fff;
@@ -10,7 +12,12 @@ const CardButton = styled.button`
   cursor: pointer;
 `;
 
-export function ProgramCard({ program, onClick }) {
+interface PropsProgramCard {
+  program: ProgramModel;
+  onClick: MouseEventHandler<HTMLButtonElement>;
+}
+
+export function ProgramCard({ program, onClick }: PropsProgramCard) {
   return (
     <CardButton onClick={onClick}>
       <h2>{program.name}</h2>
