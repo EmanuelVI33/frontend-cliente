@@ -16,23 +16,29 @@ const FormContainer = styled.div`
 `;
 
 export function Form() {
-  const { tipoFormulario, handleChangeTab, addElement } = useScript();
+  const { tipoFormulario, handleChangeTab, addElement, programming } =
+    useScript();
   const { elements } = useTimeLine();
   const { mutate: createNewElement } = useElementMutation();
 
   const handleSave = (data: ElementOptions) => {
     const index = elements.length;
+    const programmingId = programming.id;
 
     console.log(`Desde form ${{ ...data, index }}`);
     // Crear element
-    const newElement = ElementFactory.createElement({ ...data, index });
+    // const newElement = ElementFactory.createElement({
+    //   ...data,
+    //   index,
+    //   programmingId,
+    // });
 
     // Query para agregar elemento
-    createNewElement({ ...data, index });
+    createNewElement({ ...data, index, programmingId });
 
     // const e = ElementFactory.createElement(response);
 
-    addElement(newElement);
+    // addElement(newElement);
   };
 
   const fieldType =
