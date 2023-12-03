@@ -1,19 +1,36 @@
-import { useState } from "react";
 import { useScriptContext } from ".";
-import { ElementEnum } from "../model/ElementEnum";
+import { useProgrammingContext } from "@/Page/Programming/hooks/useProgrammingContext";
+import { useElementQuery } from "./useElementService";
+import { ElementEnum } from "../model";
 
 export const useScript = () => {
-  const { addElement } = useScriptContext();
-  const [tipoFormulario, setTipoFormulario] = useState("music"); // Tipo de formulario actual
+  const {
+    selectedElement,
+    setSelectedElement,
+    formType,
+    setFormType,
+    data,
+    isLoading,
+    isError,
+  } = useScriptContext();
 
-  const handleChangeTab = (nuevoTipo: ElementEnum) => {
-    console.log(nuevoTipo);
-    setTipoFormulario(nuevoTipo);
+  // Obtener programming seleccionado
+  // const { programming } = useProgrammingContext();
+
+  // const { data, isError, isLoading } = useElementQuery(programming.id);
+
+  const handleChangeTab = (newType: ElementEnum) => {
+    setFormType(newType);
   };
 
   return {
-    tipoFormulario,
+    // programming,
     handleChangeTab,
-    addElement,
+    data,
+    isError,
+    isLoading,
+    selectedElement,
+    setSelectedElement,
+    formType,
   };
 };

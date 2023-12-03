@@ -41,7 +41,7 @@ export const options: Option[] = [
   {
     type: ElementEnum.video,
     field: [
-      // { name: "title", type: "text", label: "Título" },
+      { name: "title", type: "text", label: "Título" },
       { name: "file", type: "file", label: "Subir video", accept: "video/*" },
     ],
   },

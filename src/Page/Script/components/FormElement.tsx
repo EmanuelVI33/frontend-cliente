@@ -1,7 +1,7 @@
 import { FC } from "react";
 import styled from "styled-components";
-import { useScriptContext } from "../hooks";
 import { Button, TextField } from "@mui/material";
+import { useFormElement } from "../hooks/useFormElement";
 
 interface FormField {
   name: string;
@@ -10,57 +10,21 @@ interface FormField {
   accept: string;
 }
 
-// Define el tipo para un elemento
-// interface ElementType {
-//   type: string;
-//   fields: FormField[];
-// }
-
 // Define el tipo para el componente FormElementProps
 interface FormElementProps {
   type: string;
   fields: FormField[];
-  onSave: (data: Record<string, any>) => void;
 }
-
-const FormContainer = styled.div`
-  // max-width: 400px;
-  margin: 0 auto;
-  padding: 20px 30px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-`;
 
 const Campo = styled.div`
   margin-bottom: 0.5rem;
 `;
 
-const FormElement: FC<FormElementProps> = ({ type, fields, onSave }) => {
-  const { formData, setFormData } = useScriptContext();
-
-  const handleChange = (fieldName: string, value: any) => {
-    setFormData((prevData) => ({ ...prevData, [fieldName]: value }));
-    console.log(formData);
-  };
-
-  const handleFileChange = (
-    fieldName: string,
-    e: ChangeEvent<HTMLInputElement>
-  ) => {
-    const file = e.target.files?.[0];
-
-    if (file) {
-      setFormData((prevData) => ({ ...prevData, [fieldName]: file }));
-    }
-  };
-
-  const handleSave = () => {
-    console.log({ ...formData, type });
-    onSave({ ...formData, type }); // Pasa directamente el objeto formData al método onSave
-  };
+const FormElement: FC<FormElementProps> = ({ type, fields }) => {
+  const { handleChange, handleFileChange, handleSave } = useFormElement();
 
   return (
-    <FormContainer>
+    <form encType="multipart/form-data">
       <h2>{type}</h2>
       {fields.map((field) => (
         <Campo key={field.name}>
@@ -85,139 +49,8 @@ const FormElement: FC<FormElementProps> = ({ type, fields, onSave }) => {
       <Button variant="outlined" onClick={handleSave}>
         Agregar
       </Button>
-    </FormContainer>
+    </form>
   );
 };
 
 export default FormElement;
-
-// import { useState } from "react";
-// import styled from "styled-components";
-
-// const FormContainer = styled.div`
-//   max-width: 400px;
-//   margin: 0 auto;
-// `;
-
-// const Campo = styled.div`
-//   margin-bottom: 16px;
-// `;
-
-// const LabelInput = styled.label`
-//   display: block;
-//   margin-bottom: 8px;
-// `;
-
-// const Input = styled.input`
-//   width: 100%;
-//   padding: 8px;
-// `;
-
-// const Button = styled.button`
-//   background-color: #007bff;
-//   color: #fff;
-//   padding: 8px 16px;
-//   cursor: pointer;
-// `;
-
-// interface PropForm {
-//   tipo: string;
-//   onGuardar: any;
-// }
-
-// const FormElements = ({ tipo, onGuardar }: PropForm) => {
-//   const [datosFormulario, setDatosFormulario] = useState({
-//     path: "",
-//     index: 0,
-//     duration: 0,
-//     name: "",
-//     title: "",
-//     content: "",
-//     author: "",
-//     programmingId: 1,
-//   });
-
-//   const handleGuardar = () => {
-//     // Lógica para guardar los datos
-//     onGuardar(datosFormulario);
-//   };
-
-//   const handleChange = (campo, valor) => {
-//     setDatosFormulario((prevDatos) => ({
-//       ...prevDatos,
-//       [campo]: valor,
-//     }));
-//   };
-
-//   return (
-//     <FormContainer>
-//       {tipo === "imagen" && (
-//         <Campo>
-//           <LabelInput>Duración:</LabelInput>
-//           <Input
-//             type="number"
-//             value={datosFormulario.duration}
-//             onChange={(e) => handleChange("duration", e.target.value)}
-//           />
-//         </Campo>
-//       )}
-
-//       {tipo === "music" && (
-//         <>
-//           <Campo>
-//             <LabelInput>Nombre:</LabelInput>
-//             <Input
-//               type="text"
-//               value={datosFormulario.name}
-//               onChange={(e) => handleChange("name", e.target.value)}
-//             />
-//           </Campo>
-//           <Campo>
-//             <LabelInput>Autor:</LabelInput>
-//             <Input
-//               type="text"
-//               value={datosFormulario.author}
-//               onChange={(e) => handleChange("author", e.target.value)}
-//             />
-//           </Campo>
-//         </>
-//       )}
-
-//       {tipo === "presenter" && (
-//         <>
-//           <Campo>
-//             <LabelInput>Título:</LabelInput>
-//             <Input
-//               type="text"
-//               value={datosFormulario.title}
-//               onChange={(e) => handleChange("title", e.target.value)}
-//             />
-//           </Campo>
-//           <Campo>
-//             <LabelInput>Contenido:</LabelInput>
-//             <Input
-//               type="text"
-//               value={datosFormulario.content}
-//               onChange={(e) => handleChange("content", e.target.value)}
-//             />
-//           </Campo>
-//         </>
-//       )}
-
-//       {tipo === "video" && (
-//         <Campo>
-//           <LabelInput>Título:</LabelInput>
-//           <Input
-//             type="text"
-//             value={datosFormulario.title}
-//             onChange={(e) => handleChange("title", e.target.value)}
-//           />
-//         </Campo>
-//       )}
-
-//       <Button onClick={handleGuardar}>Guardar</Button>
-//     </FormContainer>
-//   );
-// };
-
-// export default FormElements;

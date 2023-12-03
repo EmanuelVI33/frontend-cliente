@@ -1,5 +1,7 @@
 import styled from "styled-components";
 import { FC } from "react";
+import { useScript } from "../hooks";
+import { ElementEnum } from "../model";
 
 const TabsContainer = styled.div`
   display: flex;
@@ -18,22 +20,22 @@ const TabButton = styled.button<{ $isActive: boolean }>`
 `;
 
 interface TabsButtonProps {
-  etiquetas: string[];
+  etiquetas: ElementEnum[];
   indiceActivo: number;
-  onChange: (etiqueta: string) => void;
 }
 
 export const TabsButton: FC<TabsButtonProps> = ({
   etiquetas,
   indiceActivo,
-  onChange,
 }) => {
+  const { handleChangeTab } = useScript();
+
   return (
     <TabsContainer>
       {etiquetas.map((etiqueta, index) => (
         <TabButton
           key={index}
-          onClick={() => onChange(etiqueta)}
+          onClick={() => handleChangeTab(etiqueta)}
           style={{ fontWeight: indiceActivo === index ? "bold" : "normal" }}
           $isActive={indiceActivo === index}
         >

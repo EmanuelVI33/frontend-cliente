@@ -11,7 +11,8 @@ export const useProgramming = () => {
 
   const { program } = useProgramContext(); // Obtener programa seleccionado
   const { mutate: createProgramming } = useProgrammingMutation();
-  const { data: programming } = useProgrammingQuery(program.id);
+  const { data: programming = [] } = useProgrammingQuery(program.id);
+  console.log(`Lista de programming: ${programming}`);
   const { setProgramming } = useProgrammingContext();
 
   const titleRef = useRef<HTMLInputElement>(null);
@@ -20,8 +21,8 @@ export const useProgramming = () => {
   const navigate = useNavigate();
 
   const handleProgrammingClick = (programming: ProgrammingModel) => {
-    console.log(programming.elements[0]);
-    setSelectedProgramming(programming);
+    // setSelectedProgramming(programming);
+    setProgramming(programming);
   };
 
   const handleConfirmation = () => {
@@ -31,7 +32,7 @@ export const useProgramming = () => {
     console.log(`Programming seleccionado ${selectedProgramming.title}`);
 
     setProgramming(selectedProgramming); // Almacenar en el context la programación
-    setSelectedProgramming(null); // Vaciar
+    // setSelectedProgramming(null); // Vaciar
     navigate(`/programming/${id}`);
   };
 

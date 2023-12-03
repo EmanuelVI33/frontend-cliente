@@ -7,7 +7,6 @@ export interface Element {
 }
 
 export abstract class ElementModel implements Element {
-  // id?: number;
   path?: string;
   index: number;
   type: string;

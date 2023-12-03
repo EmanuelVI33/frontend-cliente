@@ -1,21 +1,17 @@
-import { useState, useRef } from "react";
+import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { ProgramModel } from "../model";
 import { useProgramContext, useProgramQuery } from ".";
 import { useProgramMutation } from "./useProgramQuery";
 
 export const useProgram = () => {
-  const [selectedProgram, setSelectedProgram] = useState<ProgramModel | null>(
-    null
-  );
   const nameRef = useRef<HTMLInputElement>(null);
   const durationRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
   const { mutate: createProgram } = useProgramMutation();
-  const { data: programs } = useProgramQuery();
-  const { setProgram } = useProgramContext();
-
-  console.log(programs);
+  const { data: programs, isLoading, isError } = useProgramQuery();
+  const { setProgram, selectedProgram, setSelectedProgram } =
+    useProgramContext();
 
   const handleCreateProgram = () => {
     const name = nameRef.current?.value;
@@ -61,5 +57,7 @@ export const useProgram = () => {
     nameRef,
     durationRef,
     programs,
+    isLoading,
+    isError,
   };
 };

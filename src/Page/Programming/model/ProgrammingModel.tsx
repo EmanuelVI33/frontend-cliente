@@ -12,6 +12,7 @@ export class ProgrammingModel {
   elements?: ElementModel[];
 
   constructor(
+    id: number,
     title: string,
     turn: string,
     startTime: string,
@@ -20,6 +21,7 @@ export class ProgrammingModel {
     presenter: string,
     programId: string
   ) {
+    this.id = id;
     this.title = title;
     this.turn = turn;
     this.startTime = startTime;

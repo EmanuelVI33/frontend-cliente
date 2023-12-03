@@ -1,13 +1,24 @@
 import React, { createContext, useEffect, useState } from "react";
 import { ProgramModel } from "../model";
 
-const ProgramContext = createContext({});
+interface ProgramContextProps {
+  program: ProgramModel | null;
+  setProgram: (id: ProgramModel | null) => void;
+  selectedProgram: ProgramModel | null;
+  setSelectedProgram: (id: ProgramModel | null) => void;
+}
+
+const ProgramContext = createContext<ProgramContextProps | undefined>(
+  undefined
+);
 
 const LOCAL_STORAGE_KEY = "selectedProgram";
 
 const ProgramProvider = ({ children }: { children: React.ReactNode }) => {
+  const [selectedProgram, setSelectedProgram] = useState<ProgramModel | null>(
+    null
+  );
   const [program, setProgram] = useState<null | ProgramModel>(() => {
-    // Cargar el programa seleccionado desde el localStorage al inicio
     const storedProgram = localStorage.getItem(LOCAL_STORAGE_KEY);
     return storedProgram ? JSON.parse(storedProgram) : null;
   });
@@ -23,6 +34,8 @@ const ProgramProvider = ({ children }: { children: React.ReactNode }) => {
       value={{
         program,
         setProgram,
+        selectedProgram,
+        setSelectedProgram,
       }}
     >
       {children}

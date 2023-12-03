@@ -1,10 +1,7 @@
 import styled from "styled-components";
 import { FormElement, TabsButton } from ".";
 import { options } from "../constants";
-import { useScript, useTimeLine } from "../hooks";
-import { ElementFactory } from "../model";
-import { ElementOptions } from "../model/ElementOptions";
-import { useElementMutation } from "../hooks/useElementService";
+import { useScript } from "../hooks";
 
 const FormContainer = styled.div`
   padding: 5px 5px;
@@ -16,46 +13,18 @@ const FormContainer = styled.div`
 `;
 
 export function Form() {
-  const { tipoFormulario, handleChangeTab, addElement, programming } =
-    useScript();
-  const { elements } = useTimeLine();
-  const { mutate: createNewElement } = useElementMutation();
 
-  const handleSave = (data: ElementOptions) => {
-    const index = elements.length;
-    const programmingId = programming.id;
+  const { formType } = useScript();
 
-    console.log(`Desde form ${{ ...data, index }}`);
-    // Crear element
-    // const newElement = ElementFactory.createElement({
-    //   ...data,
-    //   index,
-    //   programmingId,
-    // });
-
-    // Query para agregar elemento
-    createNewElement({ ...data, index, programmingId });
-
-    // const e = ElementFactory.createElement(response);
-
-    // addElement(newElement);
-  };
-
-  const fieldType =
-    options.find((el) => el.type === tipoFormulario)?.field || [];
+  const fieldType = options.find((el) => el.type === formType)?.field || [];
 
   return (
     <FormContainer>
       <TabsButton
         etiquetas={options.map((el) => el.type)}
-        indiceActivo={options.findIndex((el) => el.type === tipoFormulario)}
-        onChange={handleChangeTab}
+        indiceActivo={options.findIndex((el) => el.type === formType)}
       />
-      <FormElement
-        type={tipoFormulario}
-        fields={fieldType}
-        onSave={handleSave}
-      />
+      <FormElement type={formType} fields={fieldType} />
     </FormContainer>
   );
 }
