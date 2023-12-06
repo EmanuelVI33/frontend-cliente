@@ -7,22 +7,26 @@ import { PHeader } from "../../layout";
 import { ProgrammingCard, ProgrammingForm } from "./components";
 
 import { useFormModal } from "./context";
+import { useProgramming } from "./hooks/useProgramming";
 
-const data = Array.from({ length: 4 }).map((_, i) => ({
-  id: i,
-  title: `Programacion ${i}`,
-  presenter: `https://create-images-results.d-id.com/DefaultPresenters/Toman_f_ai/image.jpeg`,
-  description:
-    "Ant Design, a design language for background applications, is refined by Ant UED Team.",
-  duration: "00:15:00",
-  turn: "Tarde",
-  startTime: `1${i}:00:00`,
-  programId: "82394820sda",
-}));
+// const data = Array.from({ length: 4 }).map((_, i) => ({
+//   id: i,
+//   title: `Programacion ${i}`,
+//   presenter: `https://create-images-results.d-id.com/DefaultPresenters/Toman_f_ai/image.jpeg`,
+//   description:
+//     "Ant Design, a design language for background applications, is refined by Ant UED Team.",
+//   duration: "00:15:00",
+//   turn: "Tarde",
+//   startTime: `1${i}:00:00`,
+//   programId: "82394820sda",
+// }));
 
 const ProgrammingPage: React.FC = () => {
   const { id } = useParams();
+  console.log(`Id de program: ${id}`);
   const { isAdd, isModalOpen, closeModal, openModal } = useFormModal();
+  const { programming } = useProgramming({ id });
+
   return (
     <>
       <PHeader>
@@ -36,7 +40,7 @@ const ProgrammingPage: React.FC = () => {
       <div style={{ maxWidth: 960, margin: "0 auto" }}>
         <List
           itemLayout="vertical"
-          dataSource={data}
+          dataSource={programming}
           renderItem={(item) => <ProgrammingCard item={item} />}
         />
       </div>
@@ -59,7 +63,6 @@ const ProgrammingPage: React.FC = () => {
         <ProgrammingForm />
       </Modal>
     </>
-
   );
 };
 

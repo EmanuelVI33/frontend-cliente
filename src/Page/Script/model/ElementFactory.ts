@@ -10,7 +10,6 @@ import { ElementOptions } from "./ElementOptions";
 
 export class ElementFactory {
   static createElement(options: ElementOptions): ElementModel {
-    console.log(options);
     switch (options.type) {
       case ElementEnum.imagen:
         return new ImagenModel(options);

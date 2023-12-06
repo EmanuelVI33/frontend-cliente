@@ -1,5 +1,7 @@
 import styled from "styled-components";
 import { Form, Player, TimeLine } from "./components";
+import { useParams } from "react-router-dom";
+import { useScript } from "./hooks";
 
 const PaginaContainer = styled.div`
   display: grid;
@@ -12,13 +14,16 @@ const PaginaContainer = styled.div`
 `;
 
 export default function ScriptPage() {
+  const { id } = useParams();
+  const { query } = useScript({ id });
+
   return (
     <PaginaContainer>
-      <Form />
+      <Form query={query} />
 
-      <Player />
+      <Player query={query} />
 
-      <TimeLine />
+      <TimeLine query={query} />
     </PaginaContainer>
   );
 }

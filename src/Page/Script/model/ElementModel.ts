@@ -11,6 +11,7 @@ export abstract class ElementModel implements Element {
   index: number;
   type: string;
   file: File;
+  isChanged?: boolean = false;
 
   constructor(options: ElementOptions) {
     this.type = options.type;

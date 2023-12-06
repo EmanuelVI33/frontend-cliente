@@ -14,20 +14,17 @@ export class PresenterVideoModel extends ElementModel {
   play(): JSX.Element {
     return (
       <>
-        <p>Reproduciendo Video Presenter</p>
-        {this.path ? (
-          <video width="320" height="240" controls>
-            <>
-              <source src={this.path} type="video/*" />
-              <p>Tu navegador no soporta el elemento de video.</p>
-            </>
-          </video>
-        ) : (
+        <video width="320" height="320" controls>
           <>
-            <p>Contenido no generado</p>
-            {/* <source src={URL.createObjectURL(this.file)} type="video/*" /> */}
+            <source
+              src={`${import.meta.env.VITE_BASE_URL}/${this.path}`}
+              // src="http://localhost:3010/public/video/tlk_6cJrUe0SVBA1gcQ7WWSd_.mp4"
+              type="video/mp4"
+            />
+            <p>Tu navegador no soporta el elemento de video.</p>
+            <p>{`${import.meta.env.VITE_BASE_URL}/${this.path}`}</p>
           </>
-        )}
+        </video>
       </>
     );
   }

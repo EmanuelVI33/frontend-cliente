@@ -2,43 +2,47 @@ import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useProgrammingMutation, useProgrammingQuery } from ".";
 import { ProgrammingModel } from "../model/ProgrammingModel";
-import { useProgramContext } from "@/Page/Program/hooks";
+// import { useProgramContext } from "@/Page/Program/hooks";
 import { useProgrammingContext } from "./useProgrammingContext";
 
-export const useProgramming = () => {
-  const [selectedProgramming, setSelectedProgramming] =
-    useState<ProgrammingModel | null>(null);
+interface PropsProgramming {
+  id: string | undefined;
+}
 
-  const { program } = useProgramContext(); // Obtener programa seleccionado
+export const useProgramming = ({ id }: PropsProgramming) => {
+  // const [selectedProgramming, setSelectedProgramming] =
+  //   useState<ProgrammingModel | null>(null);
+
+  // const { program } = useProgramContext(); // Obtener programa seleccionado
   const { mutate: createProgramming } = useProgrammingMutation();
-  const { data: programming = [] } = useProgrammingQuery(program.id);
+  const { data: programming = [] } = useProgrammingQuery(id);
   console.log(`Lista de programming: ${programming}`);
-  const { setProgramming } = useProgrammingContext();
 
   const titleRef = useRef<HTMLInputElement>(null);
   const turnRef = useRef<HTMLInputElement>(null);
   const startTimeRef = useRef<HTMLInputElement>(null);
-  const navigate = useNavigate();
 
-  const handleProgrammingClick = (programming: ProgrammingModel) => {
-    // setSelectedProgramming(programming);
-    setProgramming(programming);
-  };
+  // const navigate = useNavigate();
 
-  const handleConfirmation = () => {
-    if (!selectedProgramming) return;
+  // const handleProgrammingClick = (programming: ProgrammingModel) => {
+  //   // setSelectedProgramming(programming);
+  //   setProgramming(programming);
+  // };
 
-    const id = selectedProgramming?.id;
-    console.log(`Programming seleccionado ${selectedProgramming.title}`);
+  // const handleConfirmation = () => {
+  //   if (!selectedProgramming) return;
 
-    setProgramming(selectedProgramming); // Almacenar en el context la programación
-    // setSelectedProgramming(null); // Vaciar
-    navigate(`/programming/${id}`);
-  };
+  //   const id = selectedProgramming?.id;
+  //   console.log(`Programming seleccionado ${selectedProgramming.title}`);
 
-  const handleClose = () => {
-    setSelectedProgramming(null);
-  };
+  //   setProgramming(selectedProgramming); // Almacenar en el context la programación
+  //   // setSelectedProgramming(null); // Vaciar
+  //   navigate(`/programming/${id}`);
+  // };
+
+  // const handleClose = () => {
+  //   setSelectedProgramming(null);
+  // };
 
   const handleCreateProgramming = () => {
     const title = titleRef.current?.value;
@@ -57,7 +61,7 @@ export const useProgramming = () => {
       title,
       turn,
       startTime: formattedStartTime,
-      programId: program.id,
+      programId: id,
     });
 
     // Limpiar el formulario después de crear un programa
@@ -69,10 +73,10 @@ export const useProgramming = () => {
     titleRef,
     turnRef,
     startTimeRef,
-    selectedProgramming,
-    handleProgrammingClick,
-    handleClose,
-    handleConfirmation,
+    // selectedProgramming,
+    // handleProgrammingClick,
+    // handleClose,
+    // handleConfirmation,
     handleCreateProgramming,
   };
 };

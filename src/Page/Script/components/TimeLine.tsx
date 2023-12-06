@@ -1,9 +1,12 @@
 import styled from "styled-components";
 
-import { useScript } from "../hooks";
+import { useScriptContext } from "../hooks";
 
 import "@/Page/Script/style/index.css";
 import { ElementFactory, ElementModel } from "../model";
+import { UseQueryResult } from "@tanstack/react-query";
+import { useElementTriggerMutation } from "../hooks/useElementService";
+import { useParams } from "react-router-dom";
 
 const LineaTiempoButton = styled.button<{ selected: boolean }>`
   padding: 10px;
@@ -16,18 +19,17 @@ const LineaTiempoButton = styled.button<{ selected: boolean }>`
   cursor: pointer;
 `;
 
-export function TimeLine() {
+export function TimeLine({ query }: { query: UseQueryResult<any, Error> }) {
+  const { data, isLoading, isError } = query;
+  const { selectedElement, handleSelectElement } = useScriptContext();
+  const { mutate: triggerElement } = useElementTriggerMutation();
+  const { id } = useParams();
 
+  console.log(`Id de programación ${id}`);
 
-  const { selectedElement, setSelectedElement, data, isLoading, isError } =
-    useScript();
+  if (isLoading) return <p>Cargando....</p>;
 
-  const handleSelectElement = (element: ElementModel) => {
-    const newElement =
-      selectedElement?.index === element.index ? null : element;
-    setSelectedElement(newElement);
-    console.log(newElement);
-  };
+  if (isError) return <p>Error...</p>;
 
   if (isLoading) {
     return <p>Cargando</p>;
@@ -40,18 +42,37 @@ export function TimeLine() {
   // Recorrer para crear la instancia correspondiente
   const elements = data.map(ElementFactory.createElement);
 
+  const handleTrigger = () => {
+    const elementsIndex = elements.reduce(
+      (acc: number[], element: ElementModel, index: number) => {
+        if (element.path === null || element.isChanged === true) {
+          acc.push(index);
+        }
+        return acc;
+      },
+      []
+    );
+
+    console.log(elementsIndex);
+
+    // Enviar a generar elementos
+    triggerElement({ elementsIndex, programmingId: id });
+  };
+
   return (
     <div className="container-timeline">
-      <button onClick={() => console.log("Holaaaaaaa")}>
-        Generar Contenido
-      </button>
+      <button onClick={handleTrigger}>Generar Contenido</button>
       <div className="timeline">
         {elements.map((element: ElementModel, index: number) => {
           return (
             <LineaTiempoButton
               key={index}
               selected={selectedElement?.index === element.index}
-              onClick={() => handleSelectElement(element)}
+              onClick={() =>
+                handleSelectElement(
+                  selectedElement?.index === element.index ? null : element
+                )
+              }
             >
               {/* <p>{element.id}</p> */}
               {element.render()}

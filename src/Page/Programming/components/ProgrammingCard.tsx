@@ -1,18 +1,20 @@
 import React from "react";
 import { DeleteOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
 import { Button, List, Modal } from "antd";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { EditOutlined } from "@mui/icons-material";
 import { ProgrammingModel } from "../model/ProgrammingModel";
 import { useFormModal } from "../context";
+import { useScriptContext } from "@/Page/Script/hooks";
 
 interface ProgrammingCardProps {
   item: ProgrammingModel;
 }
 
 const ProgrammingCard: React.FC<ProgrammingCardProps> = ({ item }) => {
+  const { id } = useParams();
   const [modal, contextHolder] = Modal.useModal();
-
+  const { handleScript } = useScriptContext();
   const { setEditValues } = useFormModal();
 
   const navigate = useNavigate();
@@ -43,10 +45,23 @@ const ProgrammingCard: React.FC<ProgrammingCardProps> = ({ item }) => {
             onClick={handleDelete}
           />,
         ]}
-        extra={<img width={200} alt={item.title} src={item.presenter} />}
+        // extra={<img width={200} alt={item.title} src={item.presenter} />}
+        extra={
+          <img
+            width={200}
+            alt={item.title}
+            src="https://create-images-results.d-id.com/DefaultPresenters/Toman_f_ai/image.jpeg"
+          />
+        }
         style={{ cursor: "pointer" }}
       >
-        <div onClick={() => navigate(`/programming/${item.id}`)}>
+        <div
+          onClick={() => {
+            console.log(`Navegar ${item.id}`);
+            handleScript(`${item.id}`);
+            navigate(`/programming/${item.id}`);
+          }}
+        >
           <List.Item.Meta
             title={<p>{item.title}</p>}
             description={item.description}

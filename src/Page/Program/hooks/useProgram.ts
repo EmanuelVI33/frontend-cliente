@@ -9,7 +9,8 @@ export const useProgram = () => {
   const durationRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
   const { mutate: createProgram } = useProgramMutation();
-  const { data: programs, isLoading, isError } = useProgramQuery();
+  const query = useProgramQuery();
+
   const { setProgram, selectedProgram, setSelectedProgram } =
     useProgramContext();
 
@@ -56,8 +57,6 @@ export const useProgram = () => {
     selectedProgram,
     nameRef,
     durationRef,
-    programs,
-    isLoading,
-    isError,
+    query,
   };
 };

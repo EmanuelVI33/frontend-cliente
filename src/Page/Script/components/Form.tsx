@@ -1,7 +1,8 @@
 import styled from "styled-components";
 import { FormElement, TabsButton } from ".";
 import { options } from "../constants";
-import { useScript } from "../hooks";
+import { useScript, useScriptContext } from "../hooks";
+import { UseQueryResult } from "@tanstack/react-query";
 
 const FormContainer = styled.div`
   padding: 5px 5px;
@@ -12,10 +13,8 @@ const FormContainer = styled.div`
   overflow-y: auto;
 `;
 
-export function Form() {
-
-  const { formType } = useScript();
-
+export function Form({ query }: { query: UseQueryResult<any, Error> }) {
+  const { formType } = useScriptContext();
   const fieldType = options.find((el) => el.type === formType)?.field || [];
 
   return (
@@ -24,7 +23,7 @@ export function Form() {
         etiquetas={options.map((el) => el.type)}
         indiceActivo={options.findIndex((el) => el.type === formType)}
       />
-      <FormElement type={formType} fields={fieldType} />
+      <FormElement type={formType} fields={fieldType} query={query} />
     </FormContainer>
   );
 }

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { FC } from "react";
-import { useScript } from "../hooks";
+import { useScript, useScriptContext } from "../hooks";
 import { ElementEnum } from "../model";
 
 const TabsContainer = styled.div`
@@ -28,7 +28,7 @@ export const TabsButton: FC<TabsButtonProps> = ({
   etiquetas,
   indiceActivo,
 }) => {
-  const { handleChangeTab } = useScript();
+  const { handleChangeTab } = useScriptContext();
 
   return (
     <TabsContainer>

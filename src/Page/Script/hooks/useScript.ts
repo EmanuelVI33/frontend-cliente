@@ -1,34 +1,21 @@
 import { useScriptContext } from ".";
-import { useProgrammingContext } from "@/Page/Programming/hooks/useProgrammingContext";
 import { useElementQuery } from "./useElementService";
-import { ElementEnum } from "../model";
 
-export const useScript = () => {
+export const useScript = ({ id }: { id: string | undefined }) => {
   const {
     selectedElement,
+    script,
     setSelectedElement,
+    handleScript,
     formType,
-    setFormType,
-    data,
-    isLoading,
-    isError,
   } = useScriptContext();
 
-  // Obtener programming seleccionado
-  // const { programming } = useProgrammingContext();
-
-  // const { data, isError, isLoading } = useElementQuery(programming.id);
-
-  const handleChangeTab = (newType: ElementEnum) => {
-    setFormType(newType);
-  };
+  const query = useElementQuery(id);
 
   return {
-    // programming,
-    handleChangeTab,
-    data,
-    isError,
-    isLoading,
+    query,
+    script,
+    handleScript,
     selectedElement,
     setSelectedElement,
     formType,

@@ -20,8 +20,11 @@ const Campo = styled.div`
   margin-bottom: 0.5rem;
 `;
 
-const FormElement: FC<FormElementProps> = ({ type, fields }) => {
-  const { handleChange, handleFileChange, handleSave } = useFormElement();
+const FormElement: FC<FormElementProps> = ({ type, fields, query }) => {
+  const { handleChange, handleFileChange, handleSave } = useFormElement({
+    type,
+    query,
+  });
 
   return (
     <form encType="multipart/form-data">

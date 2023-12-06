@@ -3,7 +3,11 @@ import { ProgramModel } from "@/Page/Program/model";
 
 export const createProgram = async (program: ProgramModel) => {
   try {
-    const response = await axiosClient.post("/program", program);
+    const response = await axiosClient.post("/program", program, {
+      headers: {
+        Accept: "application/json",
+      },
+    });
     return response.data;
   } catch (error) {
     console.error("Error creating program:", error);
@@ -13,7 +17,12 @@ export const createProgram = async (program: ProgramModel) => {
 
 export const getPrograms = async () => {
   try {
-    const response = await axiosClient.get("/program");
+    const response = await axiosClient.get("/program", {
+      headers: {
+        Accept: "application/json",
+      },
+    });
+
     return response.data;
   } catch (error) {
     console.error("Error getting programs:", error);

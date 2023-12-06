@@ -1,16 +1,20 @@
 import { useElementMutation } from "../hooks/useElementService";
 import { ElementOptions } from "../model/ElementOptions";
-import { useScript } from "../hooks";
 import { ChangeEvent, useState } from "react";
-import { useProgrammingContext } from "@/Page/Programming/hooks/useProgrammingContext";
+import { useParams } from "react-router-dom";
+import { UseQueryResult } from "@tanstack/react-query";
 
-export const useFormElement = () => {
+export const useFormElement = ({
+  type,
+  query,
+}: {
+  type: string;
+  query: UseQueryResult<any, Error>;
+}) => {
   const [formData, setFormData] = useState<ElementOptions>({});
   const { mutate: createNewElement } = useElementMutation();
-  const { programming } = useProgrammingContext();
-  const { data, formType: type } = useScript();
-
-  const programmingId = programming.id;
+  const { data } = query;
+  const { id: script } = useParams();
 
   const handleChange = (fieldName: string, value: any) => {
     setFormData((prevData) => ({ ...prevData, [fieldName]: value }));
@@ -46,10 +50,8 @@ export const useFormElement = () => {
     // Agregar type
     form.append("type", type);
 
-    const index = data.length;
-
-    form.append("index", String(index));
-    form.append("programmingId", String(programmingId));
+    form.append("index", String(data.length));
+    form.append("programmingId", String(script));
 
     // Enviar el form
     createNewElement(form);
@@ -59,7 +61,7 @@ export const useFormElement = () => {
     formData,
     setFormData,
     createNewElement,
-    programming,
+    // programming,
     data,
     handleChange,
     handleFileChange,

@@ -1,9 +1,8 @@
 import { createContext, useEffect, useState } from "react";
-import { ProgrammingModel } from "../model/ProgrammingModel";
 
 interface ProgrammingContextProps {
-  programming: ProgrammingModel | null;
-  setProgramming: (id: ProgrammingModel | null) => void;
+  programmingId: string | undefined;
+  setProgrammingId: (id: string | undefined) => void;
 }
 
 const ProgrammingContext = createContext<ProgrammingContextProps | undefined>(
@@ -13,24 +12,22 @@ const ProgrammingContext = createContext<ProgrammingContextProps | undefined>(
 const LOCAL_STORAGE_KEY = "selectedProgramming";
 
 const ProgrammingProvider = ({ children }: { children: React.ReactNode }) => {
-  const [programming, setProgramming] = useState<ProgrammingModel | null>(
-    () => {
-      const storedProgramming = localStorage.getItem(LOCAL_STORAGE_KEY);
-      return storedProgramming ? JSON.parse(storedProgramming) : null;
-    }
-  );
+  const [programmingId, setProgrammingId] = useState<string | undefined>(() => {
+    const storedProgramming = localStorage.getItem(LOCAL_STORAGE_KEY);
+    return storedProgramming ? JSON.parse(storedProgramming) : null;
+  });
 
   useEffect(() => {
-    if (programming) {
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(programming));
+    if (programmingId) {
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(programmingId));
     }
-  }, [programming]);
+  }, [programmingId]);
 
   return (
     <ProgrammingContext.Provider
       value={{
-        programming,
-        setProgramming,
+        programmingId,
+        setProgrammingId,
       }}
     >
       {children}

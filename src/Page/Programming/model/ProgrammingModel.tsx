@@ -5,7 +5,7 @@ export class ProgrammingModel {
   title: string;
   turn: string;
   startTime: string;
-  description: string;
+  description?: string;
   duration: string;
   presenter: string;
   programId: string;
@@ -16,7 +16,7 @@ export class ProgrammingModel {
     title: string,
     turn: string,
     startTime: string,
-    description: string,
+    description: string = "Programación",
     duration: string,
     presenter: string,
     programId: string
