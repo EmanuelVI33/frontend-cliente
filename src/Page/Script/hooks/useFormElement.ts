@@ -1,23 +1,27 @@
 import { useElementMutation } from "../hooks/useElementService";
 import { ElementOptions } from "../model/ElementOptions";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent } from "react";
 import { useParams } from "react-router-dom";
-import { UseQueryResult } from "@tanstack/react-query";
+import { QueryResult } from "@/interfaces";
+import { useScriptContext } from ".";
 
 export const useFormElement = ({
   type,
   query,
 }: {
   type: string;
-  query: UseQueryResult<any, Error>;
+  query: QueryResult;
 }) => {
-  const [formData, setFormData] = useState<ElementOptions>({});
+  const { formData, setFormData } = useScriptContext();
   const { mutate: createNewElement } = useElementMutation();
   const { data } = query;
   const { id: script } = useParams();
 
   const handleChange = (fieldName: string, value: any) => {
-    setFormData((prevData) => ({ ...prevData, [fieldName]: value }));
+    setFormData((prevData: ElementOptions) => ({
+      ...prevData,
+      [fieldName]: value,
+    }));
     console.log(formData);
   };
 
@@ -28,12 +32,15 @@ export const useFormElement = ({
     const file = e.target.files?.[0];
 
     if (file) {
-      setFormData((prevData) => ({ ...prevData, [fieldName]: file }));
+      setFormData((prevData: ElementOptions) => ({
+        ...prevData,
+        [fieldName]: file,
+      }));
     }
   };
 
-  const handleSave = (e: any) => {
-    e.preventDefault();
+  const handleSave = () => {
+    // e.preventDefault();
 
     const form = new FormData();
 
@@ -49,8 +56,7 @@ export const useFormElement = ({
 
     // Agregar type
     form.append("type", type);
-
-    form.append("index", String(data.length));
+    form.append("index", String(data.length)); // Agregar index
     form.append("programmingId", String(script));
 
     // Enviar el form
@@ -61,7 +67,6 @@ export const useFormElement = ({
     formData,
     setFormData,
     createNewElement,
-    // programming,
     data,
     handleChange,
     handleFileChange,

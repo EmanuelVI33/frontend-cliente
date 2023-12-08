@@ -1,8 +1,9 @@
 import styled from "styled-components";
-import { FormElement, TabsButton } from ".";
+import { FormElement } from ".";
 import { options } from "../constants";
-import { useScript, useScriptContext } from "../hooks";
-import { UseQueryResult } from "@tanstack/react-query";
+import { useScriptContext } from "../hooks";
+import { Tabs } from "antd";
+import { QueryResult } from "@/interfaces";
 
 const FormContainer = styled.div`
   padding: 5px 5px;
@@ -13,17 +14,30 @@ const FormContainer = styled.div`
   overflow-y: auto;
 `;
 
-export function Form({ query }: { query: UseQueryResult<any, Error> }) {
-  const { formType } = useScriptContext();
-  const fieldType = options.find((el) => el.type === formType)?.field || [];
+export function Form({ query }: { query: QueryResult }) {
+  const { formType, handleChangeTab } = useScriptContext();
 
   return (
     <FormContainer>
-      <TabsButton
-        etiquetas={options.map((el) => el.type)}
-        indiceActivo={options.findIndex((el) => el.type === formType)}
+      <Tabs
+        onChange={(e: string) => handleChangeTab(+e - 1)}
+        tabPosition="left"
+        type="card"
+        items={options.map((option, index) => {
+          const id = String(index + 1);
+          return {
+            label: `${option.type}`,
+            key: id,
+            children: (
+              <FormElement
+                type={options[formType].type}
+                fields={options[formType].field}
+                query={query}
+              />
+            ),
+          };
+        })}
       />
-      <FormElement type={formType} fields={fieldType} query={query} />
     </FormContainer>
   );
 }

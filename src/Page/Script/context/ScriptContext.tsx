@@ -1,20 +1,19 @@
 import { FC, ReactNode, createContext, useEffect, useState } from "react";
-import { ElementEnum, ElementModel } from "../model";
+import { ElementModel } from "../model";
 import { ElementOptions } from "../model/ElementOptions";
 // import { useElementQuery } from "../hooks/useElementService";
 // import { UseQueryResult } from "@tanstack/react-query";
 
 interface ScriptContextProps {
   formData: ElementOptions;
-  formType: ElementEnum;
+  formType: number;
   selectedElement: ElementModel | null;
   script: string | null;
-  setFormData: (data: string | any) => void;
-  setFormType: (formType: ElementEnum) => void;
+  setFormData: (data: ElementOptions) => void;
+  setFormType: (formType: number) => void;
   handleSelectElement: (selectedElement: ElementModel | null) => void;
   handleScript: (id: string | null) => void;
-  handleChangeTab: (newType: ElementEnum) => void;
-  // query: UseQueryResult<any, Error>;
+  handleChangeTab: (newType: number) => void;
 }
 
 const ScriptContext = createContext<ScriptContextProps | undefined>(undefined);
@@ -22,7 +21,7 @@ const ScriptContext = createContext<ScriptContextProps | undefined>(undefined);
 const LOCAL_STORAGE_KEY = "elements";
 
 const ScriptProvider: FC<{ children: ReactNode }> = ({ children }) => {
-  const [formType, setFormType] = useState<ElementEnum>(ElementEnum.imagen);
+  const [formType, setFormType] = useState<number>(0);
   const [script, setScript] = useState<string | null>(null);
   const [formData, setFormData] = useState<ElementOptions>({});
   const [selectedElement, setSelectedElement] = useState<ElementModel | null>(
@@ -37,6 +36,13 @@ const ScriptProvider: FC<{ children: ReactNode }> = ({ children }) => {
   }, []);
 
   useEffect(() => {
+    console.log(`${formData}`);
+
+    // Vaciar formulario si se cambia de formulario
+    setFormData({});
+  }, [formType]);
+
+  useEffect(() => {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(script));
   }, [script]);
 
@@ -44,7 +50,7 @@ const ScriptProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
   // const query = useElementQuery(script);
 
-  const handleChangeTab = (newType: ElementEnum) => {
+  const handleChangeTab = (newType: number) => {
     setFormType(newType);
   };
 

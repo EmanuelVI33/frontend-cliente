@@ -4,8 +4,6 @@ import {
   getElementsByProgramming,
   triggerElement,
 } from "../api/elementService";
-import { getEventGeneraElement } from "../api/generateService";
-import { ElementModel } from "../model";
 
 const key = "element";
 
@@ -37,10 +35,3 @@ export const useElementTriggerMutation = () => {
     },
   });
 };
-
-// export const useElementGenerateQuery = () => {
-//   return useQuery({
-//     queryKey: ["element"],
-//     queryFn: () => getEventGeneraElement(key),
-//   });
-// };

@@ -1,13 +1,15 @@
 import { ElementEnum } from "../model/ElementEnum";
 
+export interface FormField {
+  name: string;
+  type: "text" | "number" | "date" | "file"; // Puedes agregar más tipos según sea necesario
+  label: string;
+  accept?: string;
+}
+
 interface Option {
   type: ElementEnum;
-  field: Array<{
-    name: string;
-    type: "text" | "number" | "file"; // Agrega más tipos según sea necesario
-    label: string;
-    accept?: string;
-  }>;
+  field: FormField[];
 }
 
 export const options: Option[] = [

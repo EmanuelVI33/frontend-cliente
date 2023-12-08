@@ -1,25 +1,22 @@
 import { FC } from "react";
 import styled from "styled-components";
-import { Button, TextField } from "@mui/material";
 import { useFormElement } from "../hooks/useFormElement";
+import { FormField } from "../constants";
+import { Button, Form, Input } from "antd";
+import { QueryResult } from "@/interfaces";
 
-interface FormField {
-  name: string;
-  type: "text" | "number" | "date" | "file"; // Puedes agregar más tipos según sea necesario
-  label: string;
-  accept: string;
-}
-
-// Define el tipo para el componente FormElementProps
 interface FormElementProps {
   type: string;
   fields: FormField[];
+  query: QueryResult;
 }
 
 const Campo = styled.div`
   margin-bottom: 0.5rem;
 `;
 
+// El type de formulario iamgen, video, ...
+// fields el objeto para agregar  los datos y proporcionar query para saber el index
 const FormElement: FC<FormElementProps> = ({ type, fields, query }) => {
   const { handleChange, handleFileChange, handleSave } = useFormElement({
     type,
@@ -27,32 +24,32 @@ const FormElement: FC<FormElementProps> = ({ type, fields, query }) => {
   });
 
   return (
-    <form encType="multipart/form-data">
+    <Form layout="vertical" encType="multipart/form-data" onFinish={handleSave}>
       <h2>{type}</h2>
       {fields.map((field) => (
-        <Campo key={field.name}>
+        <Form.Item label={field.label}>
           {field.type === "file" ? (
-            <input
+            <Input
               type="file"
               accept={field.accept}
               onChange={(e) => handleFileChange(field.name, e)}
             />
           ) : (
-            <TextField
+            <Input
               id="outlined-basic"
-              label={field.label}
-              variant="standard"
+              size="large"
               type={field.type}
               onChange={(e) => handleChange(field.name, e.target.value)}
-              fullWidth={true}
             />
           )}
-        </Campo>
+        </Form.Item>
       ))}
-      <Button variant="outlined" onClick={handleSave}>
-        Agregar
-      </Button>
-    </form>
+      <Form.Item>
+        <Button type="primary" htmlType="submit">
+          Agregar
+        </Button>
+      </Form.Item>
+    </Form>
   );
 };
 

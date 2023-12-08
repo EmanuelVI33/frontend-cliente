@@ -19,15 +19,22 @@ const MediaContainer = styled.div`
   margin-top: 16px;
 `;
 
+const FullWidthHeightVideo = styled.video`
+  // width: auto;
+  // height: auto;
+  // object-fit: cover; /* Esto asegura que el video cubra completamente el contenedor */
+`;
+
 const Player = ({ query }: { query: UseQueryResult<any, Error> }) => {
   const { data, isLoading, isError } = query;
   const { selectedElement } = useScriptContext();
   const videoRef = useRef<HTMLVideoElement | null>(null);
-  const [playlist, setPlaylist] = useState<ElementModel[]>([]);
-  const [autoPlayAll, setAutoPlayAll] = useState(false);
+  const [playlist, setPlaylist] = useState<ElementModel[]>([]); // Lista de elementos
+  const [autoPlayAll, setAutoPlayAll] = useState(false); // Reproducción automática
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
 
   useEffect(() => {
+    // Mapear lista de elementos
     if (data) {
       const elements = data.map(ElementFactory.createElement);
       setPlaylist(elements);
@@ -38,10 +45,18 @@ const Player = ({ query }: { query: UseQueryResult<any, Error> }) => {
     const initializeVideo = async () => {
       if (playlist.length > 0 && videoRef.current) {
         try {
+          let index = currentVideoIndex;
+          while (
+            playlist[currentVideoIndex].path === null &&
+            index > playlist.length
+          ) {
+            index++;
+          }
+
           // Limpiar el video actual antes de cargar uno nuevo
           videoRef.current.src = "";
           await videoRef.current.load();
-          if (autoPlayAll) {
+          if (autoPlayAll && index < playlist.length) {
             // Cargar el siguiente video en la lista de reproducción
             videoRef.current.src = `${import.meta.env.VITE_BASE_URL}/${
               playlist[currentVideoIndex].path
@@ -95,7 +110,7 @@ const Player = ({ query }: { query: UseQueryResult<any, Error> }) => {
       <h2>Reproductor</h2>
       <MediaContainer>
         <div>
-          <video
+          <FullWidthHeightVideo
             ref={videoRef}
             width="320"
             height="320"
@@ -119,10 +134,19 @@ const Player = ({ query }: { query: UseQueryResult<any, Error> }) => {
               }
               type="video/mp4"
             />
-          </video>
+          </FullWidthHeightVideo>
         </div>
-        <button onClick={handlePlayAll}>Reproducir Todos</button>
-        <button onClick={handlePlayIndividual}>Reproducir Individual</button>
+        {(selectedElement && selectedElement.path !== null) ||
+        selectedElement === null ? (
+          <>
+            <button onClick={handlePlayAll}>Reproducir Todos</button>
+            <button onClick={handlePlayIndividual}>
+              Reproducir Individual
+            </button>{" "}
+          </>
+        ) : (
+          <p>Contenido no generado</p>
+        )}
       </MediaContainer>
     </PlayerContainer>
   );

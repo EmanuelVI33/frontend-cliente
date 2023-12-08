@@ -50,7 +50,7 @@ const ProgramForm: React.FC = () => {
   const handleSubmit = (value: any) => {
     value.duration = value["duration"].format("HH:mm:ss");
 
-    console.log(value);
+    // console.log(value);
   };
 
   const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);

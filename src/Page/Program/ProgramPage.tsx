@@ -5,18 +5,6 @@ import { PHeader } from "@/layout";
 import { useModal } from "./context";
 
 export default function ProgramPage() {
-  // const {
-  //   selectedProgram,
-  //   handleCreateProgram,
-  //   handleProgramClick,
-  //   handleConfirmation,
-  //   closeModal,
-  //   nameRef,
-  //   durationRef,
-  //   programs,
-  // } = useProgram();
-
-
   const { isModalOpen, openModal, closeModal, isAdd } = useModal();
 
   return (

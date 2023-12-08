@@ -10,22 +10,6 @@ export class ImagenModel extends ElementModel {
     this.duration = options.duration;
   }
 
-  play(): JSX.Element {
-    console.log(this.path);
-    return (
-      <>
-        {this.path ? (
-          <img src={this.path} alt={this.type} />
-        ) : (
-          <div>
-            <p>Contenido no generado</p>
-            {/* <img src={URL.createObjectURL(this.file)} alt={this.type} /> */}
-          </div>
-        )}
-      </>
-    );
-  }
-
   render(): JSX.Element {
     return (
       <>

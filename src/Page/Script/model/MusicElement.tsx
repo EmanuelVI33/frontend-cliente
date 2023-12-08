@@ -11,18 +11,6 @@ export class MusicModel extends ElementModel {
     this.author = options.author;
   }
 
-  play(): JSX.Element {
-    return (
-      <>
-        <p>Reproduciendo Música</p>
-        {/* <audio controls>
-          <source src={this.path} type="audio/mp3" />
-          Tu navegador no soporta el elemento de audio.
-        </audio> */}
-      </>
-    );
-  }
-
   render(): JSX.Element {
     return (
       <>

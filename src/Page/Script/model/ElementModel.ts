@@ -1,7 +1,6 @@
 import { ElementOptions } from "./ElementOptions";
 
 export interface Element {
-  play(): JSX.Element;
   render(): JSX.Element;
   getAllAttributes(): ElementOptions;
 }
@@ -29,7 +28,6 @@ export abstract class ElementModel implements Element {
     };
   }
 
-  abstract play(): JSX.Element;
   abstract render(): JSX.Element;
   abstract getAllAttributes(): ElementOptions;
 }
