@@ -1,24 +1,28 @@
+import { Dayjs } from "dayjs";
+
 export class ProgramModel {
-  id?: string;
+  id?: number;
   name: string;
-  duration: string;
+  duration: string | Dayjs;
   description: string;
   cover: string;
-  presenter: string;
+  host: string;
+  coverUrl?: string;
+  photoUrl?: string;
 
   constructor(
     name: string,
     duration: string,
     description = "",
     cover = "",
-    presenter = "",
-    id?: string
+    host = "",
+    id?: number
   ) {
     this.id = id;
     this.name = name;
     this.duration = duration;
     this.description = description;
     this.cover = cover;
-    this.presenter = presenter;
+    this.host = host;
   }
 }

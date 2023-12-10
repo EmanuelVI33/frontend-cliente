@@ -2,10 +2,9 @@ import React, { createContext, useEffect, useState } from "react";
 import { ProgramModel } from "../model";
 
 interface ProgramContextProps {
-  program: ProgramModel | null;
-  setProgram: (id: ProgramModel | null) => void;
   selectedProgram: ProgramModel | null;
   setSelectedProgram: (id: ProgramModel | null) => void;
+  getStorageProgram: () => ProgramModel | null;
 }
 
 const ProgramContext = createContext<ProgramContextProps | undefined>(
@@ -15,27 +14,26 @@ const ProgramContext = createContext<ProgramContextProps | undefined>(
 const LOCAL_STORAGE_KEY = "selectedProgram";
 
 const ProgramProvider = ({ children }: { children: React.ReactNode }) => {
-  const [selectedProgram, setSelectedProgram] = useState<ProgramModel | null>(
+  const [selectedProgram, setSelectedProgram] = useState<null | ProgramModel>(
     null
   );
-  const [program, setProgram] = useState<null | ProgramModel>(() => {
-    const storedProgram = localStorage.getItem(LOCAL_STORAGE_KEY);
-    return storedProgram ? JSON.parse(storedProgram) : null;
-  });
 
   useEffect(() => {
-    if (program) {
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(program));
+    if (selectedProgram) {
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(selectedProgram));
     }
-  }, [program]);
+  }, [selectedProgram]);
 
+  function getStorageProgram() {
+    const storedProgram = localStorage.getItem(LOCAL_STORAGE_KEY);
+    return storedProgram ? JSON.parse(storedProgram) : null;
+  }
   return (
     <ProgramContext.Provider
       value={{
-        program,
-        setProgram,
         selectedProgram,
         setSelectedProgram,
+        getStorageProgram,
       }}
     >
       {children}

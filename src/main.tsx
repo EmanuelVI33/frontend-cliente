@@ -1,13 +1,15 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import esES from "antd/locale/es_ES";
-import App from "./App.tsx";
-import { ProgramProvider } from "./Page/Program/context/ProgramContext.tsx";
+import { ConfigProvider } from "antd";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
 import "./index.css";
+
+import App from "./App.tsx";
 import { ProgrammingProvider } from "./Page/Programming/context/ProgrammingContext.tsx";
 import { ScriptProvider } from "./Page/Script/context/ScriptContext.tsx";
-import { ConfigProvider } from "antd";
+import { ProgramProvider } from "./Page/Program/context/ProgramContext.tsx";
 
 const queryClient = new QueryClient();
 

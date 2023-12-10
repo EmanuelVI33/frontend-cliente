@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import { DeleteOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
 import { Avatar, Button, Card, Modal } from "antd";
@@ -5,27 +6,9 @@ import { useNavigate } from "react-router-dom";
 import { ProgramModel } from "../model";
 import { EditOutlined } from "@mui/icons-material";
 import { useModal } from "../context";
+import { useProgram, useProgramContext } from "../hooks";
 
 const { Meta } = Card;
-
-const presenters = [
-  {
-    id: "1111",
-    url: "https://create-images-results.d-id.com/DefaultPresenters/Toman_f_ai/image.jpeg",
-  },
-  {
-    id: "2222",
-    url: "https://create-images-results.d-id.com/DefaultPresenters/Fotrisa_f_ai/image.jpg",
-  },
-  {
-    id: "3333",
-    url: "https://create-images-results.d-id.com/DefaultPresenters/Andrew_m_ai/image.jpg",
-  },
-  {
-    id: "4444",
-    url: "https://create-images-results.d-id.com/DefaultPresenters/Kanon_m_ai/image.jpeg",
-  },
-];
 
 interface ProgramCardProps {
   item: ProgramModel;
@@ -34,7 +17,14 @@ interface ProgramCardProps {
 const ProgramCard: React.FC<ProgramCardProps> = ({ item }) => {
   const [modal, contextHolder] = Modal.useModal();
   const { setEditValues } = useModal();
+  const {
+    handleDeleteProgram: deleteProgram,
+    // handleChangeFile,
+  } = useProgram();
+  const { setSelectedProgram } = useProgramContext();
   const navigate = useNavigate();
+
+  // console.log(hosts);
 
   const handleDeleteProgram = () => {
     modal.confirm({
@@ -42,11 +32,15 @@ const ProgramCard: React.FC<ProgramCardProps> = ({ item }) => {
       icon: <ExclamationCircleOutlined />,
       okText: "Eliminar",
       content: "¿Estás seguro de que quieres eliminar el programa?",
+      onOk: () => deleteProgram(item.id!),
     });
   };
 
   // Colocar item para editar
   const handleEdit = () => {
+    // handleChangeFile({
+    //   fileList: [{ uid: "-1", name: item.cover, url: item.coverUrl }],
+    // });
     setEditValues(item);
   };
 
@@ -58,8 +52,11 @@ const ProgramCard: React.FC<ProgramCardProps> = ({ item }) => {
         cover={
           <img
             alt={item.name}
-            src={item.cover}
-            onClick={() => navigate(`/program/${item.id}`)}
+            src={item.coverUrl}
+            onClick={() => {
+              setSelectedProgram(item);
+              navigate(`/program/${item.id}`);
+            }}
           />
         }
         actions={[
@@ -72,11 +69,7 @@ const ProgramCard: React.FC<ProgramCardProps> = ({ item }) => {
         ]}
       >
         <Meta
-          avatar={
-            <Avatar
-              src={presenters.find((p) => p.id === item.presenter)?.url}
-            />
-          }
+          avatar={<Avatar src={item.photoUrl} />}
           title={item.name}
           description={item.description}
         />

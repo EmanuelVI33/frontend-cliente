@@ -1,2 +1,2 @@
-export * from "./useProgrammingOtro";
+export * from "./useProgramming";
 export * from "./useProgrammingQuery";

@@ -1,30 +1,53 @@
-import { Card, Col, Modal, Row } from "antd";
+import { Card, Col, Modal, Row, Spin, message } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { ProgramForm, ProgramList } from "./components";
 import { PHeader } from "@/layout";
 import { useModal } from "./context";
+import { useProgram } from "./hooks";
+import HostModal from "@/Components/HostModal";
 
 export default function ProgramPage() {
-  const { isModalOpen, openModal, closeModal, isAdd } = useModal();
+  const {
+    isModalOpen,
+    isAdd,
+    isHostOpen,
+    closeModal,
+    openModal,
+    closeHostModal,
+  } = useModal();
+  const { isLoading, isError, error } = useProgram();
+
+  const [messageApi] = message.useMessage();
 
   return (
     <>
       <PHeader> Lista de Programas</PHeader>
+
       <div style={{ height: 20 }}></div>
+
+      {!isLoading &&
+        isError &&
+        messageApi.open({
+          type: "error",
+          content: `${error}`,
+        })}
       <Row gutter={[16, 16]} wrap align="middle">
         <Col span={6}>
           <AddProgramCard onClick={openModal} />
         </Col>
-        <ProgramList />
+        {isLoading && <Spin />}
+        {!isLoading && !isError && <ProgramList />}
       </Row>
       <Modal
         title={isAdd ? "Crear Nuevo Programa" : "Editar Programa"}
         open={isModalOpen}
         onCancel={closeModal}
         footer={null}
+        width={600}
       >
         <ProgramForm />
       </Modal>
+      <HostModal isModalOpen={isHostOpen} closeModal={closeHostModal} />
     </>
   );
 }

@@ -1,4 +1,4 @@
-import { useState } from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Button,
   Col,
@@ -9,55 +9,27 @@ import {
   Row,
   TimePicker,
   Upload,
-  UploadFile,
 } from "antd";
+
 import { PlusOutlined } from "@ant-design/icons";
 import { useModal } from "../context";
+import { useProgram } from "../hooks";
+import { buttonItemLayout, formItemLayout, toUpperCase } from "@/constant";
 
-const formItemLayout = { labelCol: { span: 8 }, wrapperCol: { span: 16 } };
-const buttonItemLayout = { wrapperCol: { span: 14, offset: 4 } };
 const { TextArea } = Input;
 
-const presenters = [
-  {
-    id: "1111",
-    url: "https://create-images-results.d-id.com/DefaultPresenters/Toman_f_ai/image.jpeg",
-  },
-  {
-    id: "2222",
-    url: "https://create-images-results.d-id.com/DefaultPresenters/Fotrisa_f_ai/image.jpg",
-  },
-  {
-    id: "3333",
-    url: "https://create-images-results.d-id.com/DefaultPresenters/Andrew_m_ai/image.jpg",
-  },
-  {
-    id: "4444",
-    url: "https://create-images-results.d-id.com/DefaultPresenters/Kanon_m_ai/image.jpeg",
-  },
-];
-
 const ProgramForm: React.FC = () => {
-  const { isAdd, form } = useModal();
-  const [fileList, setFileList] = useState<UploadFile[]>([
-    { uid: "xxxxx", name: "xxxx" },
-  ]);
-
-  const handleProgramName = (value: string) => {
-    return value.toUpperCase();
-  };
-
-  const handleSubmit = (value: any) => {
-    value.duration = value["duration"].format("HH:mm:ss");
-
-    // console.log(value);
-  };
-
-  const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
+  const { isAdd, form, openHostModal } = useModal();
+  const { hosts, handleSubmit, handleChangeFile, fileList } = useProgram();
 
   return (
     <>
       <Form form={form} {...formItemLayout} onFinish={handleSubmit}>
+        {!isAdd ? (
+          <Form.Item name="id" hidden>
+            <Input />{" "}
+          </Form.Item>
+        ) : null}
         <Form.Item
           label="Nombre del Programa"
           name="name"
@@ -67,7 +39,7 @@ const ProgramForm: React.FC = () => {
               message: "El nombre del programa no puede estar vacío",
             },
           ]}
-          normalize={handleProgramName}
+          normalize={toUpperCase}
         >
           <Input placeholder="Introduzca el nombre del programa" />
         </Form.Item>
@@ -98,57 +70,64 @@ const ProgramForm: React.FC = () => {
           <TextArea />
         </Form.Item>
 
-        <Form.Item label="Portada" name="cover">
-          <Upload
-            accept="image/*"
-            beforeUpload={(file) => {
-              setFileList([...fileList, file]);
-              return false;
-            }}
-            listType="picture-card"
-            fileList={fileList}
-            onChange={handleChange}
-          >
-            {fileList.length >= 1 ? null : (
-              <div>
-                <PlusOutlined />
-                <div
-                  style={{
-                    marginTop: 8,
-                  }}
-                >
-                  Subir Portada
-                </div>
-              </div>
-            )}
-          </Upload>
-        </Form.Item>
-
-        <Form.Item
-          label="Presentador"
-          name="presenter"
-          rules={[
-            {
-              required: true,
-              message: "Elegir un presentador para el programa ",
-            },
-          ]}
-        >
-          <Radio.Group>
-            <Row gutter={[16, 16]}>
-              {presenters.map((p) => (
-                <Col span={12} key={p.id}>
-                  <Radio
-                    value={p.id}
-                    style={{ lineHeight: "32px" }}
-                    disabled={!isAdd}
+        {isAdd ? (
+          <Form.Item label="Portada" name="cover">
+            <Upload
+              accept="image/*"
+              beforeUpload={() => false}
+              listType="picture-card"
+              fileList={fileList}
+              onChange={handleChangeFile}
+            >
+              {fileList.length >= 1 ? null : (
+                <div>
+                  <PlusOutlined />
+                  <div
+                    style={{
+                      marginTop: 8,
+                    }}
                   >
-                    <Image width={90} height={80} src={p.url} />
-                  </Radio>
-                </Col>
-              ))}
-            </Row>
-          </Radio.Group>
+                    Subir Portada
+                  </div>
+                </div>
+              )}
+            </Upload>
+          </Form.Item>
+        ) : null}
+
+        <Form.Item label="Presentador">
+          <Form.Item
+            name="host"
+            rules={[
+              {
+                required: true,
+                message: "Elegir un presentador para el programa ",
+              },
+            ]}
+          >
+            <Radio.Group>
+              <Row gutter={[32, 32]}>
+                {hosts.map((p: any) => (
+                  <Col span={8} key={p.id}>
+                    <Radio
+                      value={p.id}
+                      style={{ lineHeight: "32px" }}
+                      disabled={!isAdd}
+                    >
+                      <Image width={90} height={80} src={p.photoUrl} />
+                    </Radio>
+                  </Col>
+                ))}
+              </Row>
+            </Radio.Group>
+          </Form.Item>
+          {isAdd ? (
+            <Form.Item>
+              <Button type="primary" onClick={openHostModal}>
+                Añadir presentador
+              </Button>
+            </Form.Item>
+          ) : null}
         </Form.Item>
 
         <Form.Item {...buttonItemLayout}>

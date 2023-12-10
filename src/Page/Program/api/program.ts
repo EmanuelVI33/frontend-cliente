@@ -1,11 +1,11 @@
 import { axiosClient } from "@/constant";
 import { ProgramModel } from "@/Page/Program/model";
 
-export const createProgram = async (program: ProgramModel) => {
+export const createProgram = async (formData:FormData) => {
   try {
-    const response = await axiosClient.post("/program", program, {
+    const response = await axiosClient.post("/program", formData,{
       headers: {
-        Accept: "application/json",
+        'Content-Type': 'multipart/form-data',
       },
     });
     return response.data;
@@ -17,11 +17,7 @@ export const createProgram = async (program: ProgramModel) => {
 
 export const getPrograms = async () => {
   try {
-    const response = await axiosClient.get("/program", {
-      headers: {
-        Accept: "application/json",
-      },
-    });
+    const response = await axiosClient.get("/program");
 
     return response.data;
   } catch (error) {
@@ -40,12 +36,12 @@ export const getProgramById = async (id: number) => {
   }
 };
 
-export const updateProgram = async (id: number, program: ProgramModel) => {
+export const updateProgram = async (program: ProgramModel) => {
   try {
-    const response = await axiosClient.patch(`/program/${id}`, program);
+    const response = await axiosClient.patch(`/program/${program.id}`, program);
     return response.data;
   } catch (error) {
-    console.error(`Error updating program with id ${id}:`, error);
+    console.error(`Error updating program with id ${program.id}:`, error);
     throw error;
   }
 };
