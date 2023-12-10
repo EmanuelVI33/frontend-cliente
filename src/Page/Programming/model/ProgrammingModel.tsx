@@ -1,4 +1,4 @@
-import { ElementModel } from "@/Page/Script/model";
+// import { ElementModel } from "@/Page/Script/model";s
 
 export class ProgrammingModel {
   id?: number;
@@ -9,7 +9,8 @@ export class ProgrammingModel {
   duration: string;
   presenter: string;
   programId: string;
-  elements?: ElementModel[];
+  // Array de solo los path de los elements
+  elements: string[] = [];
 
   constructor(
     id: number,
@@ -19,7 +20,8 @@ export class ProgrammingModel {
     description: string = "Programación",
     duration: string,
     presenter: string,
-    programId: string
+    programId: string,
+    elements: string[]
   ) {
     this.id = id;
     this.title = title;
@@ -29,6 +31,6 @@ export class ProgrammingModel {
     this.description = description;
     this.duration = duration;
     this.presenter = presenter;
-    this.elements = [];
+    this.elements = elements;
   }
 }

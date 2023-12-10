@@ -2,30 +2,24 @@ import React from "react";
 import { Link, useParams } from "react-router-dom";
 import { ArrowLeftOutlined, PlusOutlined } from "@ant-design/icons";
 import { FloatButton, List, Modal } from "antd";
-
 import { PHeader } from "../../layout";
 import { ProgrammingCard, ProgrammingForm } from "./components";
-
 import { useFormModal } from "./context";
 import { useProgramming } from "./hooks/useProgramming";
 
-// const data = Array.from({ length: 4 }).map((_, i) => ({
-//   id: i,
-//   title: `Programacion ${i}`,
-//   presenter: `https://create-images-results.d-id.com/DefaultPresenters/Toman_f_ai/image.jpeg`,
-//   description:
-//     "Ant Design, a design language for background applications, is refined by Ant UED Team.",
-//   duration: "00:15:00",
-//   turn: "Tarde",
-//   startTime: `1${i}:00:00`,
-//   programId: "82394820sda",
-// }));
-
 const ProgrammingPage: React.FC = () => {
   const { id } = useParams();
-  console.log(`Id de program: ${id}`);
   const { isAdd, isModalOpen, closeModal, openModal } = useFormModal();
-  const { programming } = useProgramming({ id });
+  const { query } = useProgramming({ id });
+  const { data: programming = [], isLoading, isError } = query;
+
+  if (isLoading) return <p>Cargando...</p>;
+
+  if (isError) return <p>Error...</p>;
+
+  const handleCloseModal = () => {
+    closeModal();
+  };
 
   return (
     <>
@@ -57,7 +51,7 @@ const ProgrammingPage: React.FC = () => {
       <Modal
         title={isAdd ? "Crear Nueva Programación" : "Editar Programación"}
         open={isModalOpen}
-        onCancel={closeModal}
+        onCancel={handleCloseModal}
         footer={null}
       >
         <ProgrammingForm />
