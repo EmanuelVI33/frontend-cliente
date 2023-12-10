@@ -1,17 +1,24 @@
+
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import {
   DeleteOutlined,
   ExclamationCircleOutlined,
   PlayCircleOutlined,
 } from "@ant-design/icons";
 import { Button, List, Modal } from "antd";
-import { useNavigate } from "react-router-dom";
+
 import { EditOutlined } from "@mui/icons-material";
+
 import { ProgrammingModel } from "../model/ProgrammingModel";
 import { useFormModal } from "../context";
+
+import { useProgramming } from "../hooks";
 import { usePlayer, useScriptContext } from "@/Page/Script/hooks";
 import FlexRow from "../style/FlexRow";
 import { ProgrammingPlayer } from ".";
+
 
 interface ProgrammingCardProps {
   item: ProgrammingModel;
@@ -22,11 +29,15 @@ const ProgrammingCard: React.FC<ProgrammingCardProps> = ({ item }) => {
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const { handleScript } = useScriptContext();
   const { setEditValues } = useFormModal();
+
+  const { handleDeleteProgramming } = useProgramming();
+
   const playlist = item.elements;
 
   const { handlePlay } = usePlayer({
     playlist,
   });
+
 
   const navigate = useNavigate();
 
@@ -36,12 +47,16 @@ const ProgrammingCard: React.FC<ProgrammingCardProps> = ({ item }) => {
       icon: <ExclamationCircleOutlined />,
       okText: "Eliminar",
       content: "¿Estás seguro de que quieres eliminar la programación?",
+      onOk: () => handleDeleteProgramming(item.id!),
     });
   };
 
   const handleEdit = () => {
     setEditValues(item);
   };
+
+
+  // console.log(item);
 
   const handleCloseModal = () => {
     setIsPlaying(false);
@@ -61,14 +76,14 @@ const ProgrammingCard: React.FC<ProgrammingCardProps> = ({ item }) => {
             onClick={handleDelete}
           />,
         ]}
-        // extra={<img width={200} alt={item.title} src={item.presenter} />}
+        // extra={<img width={200} alt={item.title} src={item.photoUrl} />}
         extra={
           <FlexRow>
             <img
               width={180}
               alt={item.title}
               className="mr-4"
-              src="https://create-images-results.d-id.com/DefaultPresenters/Toman_f_ai/image.jpeg"
+              src={item.photoUrl}
             />
             <Button type="primary" onClick={() => setIsPlaying(true)}>
               <PlayCircleOutlined width={200} />

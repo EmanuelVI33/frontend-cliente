@@ -1,46 +1,64 @@
-import { useRef } from "react";
-import { useProgrammingQuery } from ".";
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import dayjs, { Dayjs } from "dayjs";
+
 import { QueryResult } from "@/interfaces";
 
-interface PropsProgramming {
-  id: string | undefined;
-}
 
-export const useProgramming = ({ id }: PropsProgramming) => {
-  const query: QueryResult = useProgrammingQuery(id);
-  const titleRef = useRef<HTMLInputElement>(null);
-  const turnRef = useRef<HTMLInputElement>(null);
-  const startTimeRef = useRef<HTMLInputElement>(null);
+import { useCreateProgrammingMutation, useDeleteProgrammingMutation, useProgrammingQuery, useUpdateProgrammingMutation } from ".";
+import { useHostQuery } from "@/hooks/useHostQuery";
+import {useProgramContext } from "@/Page/Program/hooks";
+import { useFormModal } from "../context";
 
-  const handleCreateProgramming = () => {
-    const title = titleRef.current?.value;
-    const turn = Number(turnRef.current?.value);
-    const startTime = startTimeRef.current?.valueAsDate; // Acceder al valor de la fecha
 
-    console.log(`Fecha ${startTime}`);
+export const useProgramming = () => {
+  const {data: hosts} = useHostQuery();
 
-    if (!title || !turn || !startTime) return;
+  const { mutate: createProgramming } = useCreateProgrammingMutation();
+  const { mutate: deleteProgramming } = useDeleteProgrammingMutation();
+  const { mutate: updateProgramming } = useUpdateProgrammingMutation();
 
-    const formattedStartTime = startTime.toISOString().split("T")[0];
+  const {getStorageProgram} = useProgramContext();
+  const programId = getStorageProgram()!.id!
+  const {isLoading, error, data: programming = [] } = useProgrammingQuery(programId);
 
-    console.log("Pasoo");
+  const { isAdd,closeModal  } = useFormModal();
 
-    createProgramming({
-      title,
-      turn,
-      startTime: formattedStartTime,
-      programId: id,
-    });
+  console.log(`Lista de programming: ${programming}`);
 
-    // Limpiar el formulario después de crear un programa
-    titleRef.current.value = "";
+
+  const handleSubmit = (value:any) => {
+    
+    if (value["duration"] instanceof dayjs) {
+      value.duration = (value["duration"] as Dayjs).format("HH:mm:ss");
+    }
+    if (value["startTime"] instanceof dayjs) {
+      value.startTime = (value["startTime"] as Dayjs).format("HH:mm:ss");
+    }
+    value.programId = programId;
+    // console.log(value);
+    if (isAdd) {
+     createProgramming(value);
+    } else {
+      updateProgramming(value);
+    }
+
+    closeModal();
+  };
+
+
+  const handleDeleteProgramming = (id:number) => {
+    // console.log(id);
+    deleteProgramming(id);
   };
 
   return {
-    query,
-    titleRef,
-    turnRef,
-    startTimeRef,
-    handleCreateProgramming,
+    programming,
+    hosts,
+    isLoading,
+    error,
+    handleSubmit,
+    handleDeleteProgramming,
+
   };
 };

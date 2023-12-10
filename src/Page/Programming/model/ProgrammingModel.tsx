@@ -3,34 +3,37 @@
 export class ProgrammingModel {
   id?: number;
   title: string;
-  turn: string;
   startTime: string;
-  description?: string;
+  description: string;
   duration: string;
-  presenter: string;
-  programId: string;
+  host: string;
+  photoUrl?: string;
+  programId: number;
+
   // Array de solo los path de los elements
   elements: string[] = [];
+
 
   constructor(
     id: number,
     title: string,
-    turn: string,
     startTime: string,
     description: string = "Programación",
     duration: string,
-    presenter: string,
-    programId: string,
+
+    host: string,
+    programId: number
     elements: string[]
+
   ) {
     this.id = id;
     this.title = title;
-    this.turn = turn;
     this.startTime = startTime;
     this.programId = programId;
     this.description = description;
     this.duration = duration;
-    this.presenter = presenter;
+
+    this.host = host;
     this.elements = elements;
   }
 }

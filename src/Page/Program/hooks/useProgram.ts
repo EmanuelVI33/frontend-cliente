@@ -1,62 +1,71 @@
-import { useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import dayjs, { Dayjs } from "dayjs";
+import { UploadFile } from "antd";
+
 import { ProgramModel } from "../model";
-import { useProgramContext, useProgramQuery } from ".";
-import { useProgramMutation } from "./useProgramQuery";
+import { useProgramQuery } from ".";
+import { useCreateProgramMutation, useDeleteProgramMutation, useUpdateProgramMutation } from "./useProgramQuery";
+import { useHostQuery } from "@/hooks/useHostQuery";
+import { useModal } from "../context";
 
 export const useProgram = () => {
-  const nameRef = useRef<HTMLInputElement>(null);
-  const durationRef = useRef<HTMLInputElement>(null);
-  const navigate = useNavigate();
-  const { mutate: createProgram } = useProgramMutation();
-  const query = useProgramQuery();
+  const {data: hosts} = useHostQuery();
+  
+  const { mutate: createProgram } = useCreateProgramMutation();
+  const { mutate: deleteProgram } = useDeleteProgramMutation();
+  const { mutate: updateProgram } = useUpdateProgramMutation();
+  
+  const {isLoading, isError, error, data:programs} = useProgramQuery();
+  const { isAdd,closeModal  } = useModal();
 
-  const { setProgram, selectedProgram, setSelectedProgram } =
-    useProgramContext();
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
 
-  const handleCreateProgram = () => {
-    const name = nameRef.current?.value;
-    const duration = Number(durationRef.current?.value);
-
-    if (!name || !duration) return;
-
-    createProgram({
-      name,
-      duration,
-    });
-
-    // Limpiar el formulario después de crear un programa
-    if (nameRef.current) nameRef.current.value = "";
-    if (durationRef.current) durationRef.current.value = "";
+  const handleChangeFile = ({
+    fileList: newFileList,
+  }: {
+    fileList: UploadFile[];
+  }) => {
+    setFileList(newFileList);
   };
 
-  const handleProgramClick = (program: ProgramModel) => {
-    console.log(program);
-    setSelectedProgram(program);
+  const handleSubmit = (value:ProgramModel) => {
+    // console.log(value);
+    if (value["duration"] instanceof dayjs) {
+      value.duration = (value["duration"] as Dayjs).format("HH:mm:ss");
+    }
+
+    if (isAdd) {
+      if (fileList.length) return;
+      const formData = new FormData();
+      formData.append("cover", fileList[0].originFileObj as Blob);
+  
+      formData.append("data", JSON.stringify(value));
+     createProgram(formData);
+    } else {
+      console.log(value);
+      updateProgram(value);
+    }
+
+    closeModal();
+    
   };
 
-  const handleConfirmation = () => {
-    if (!selectedProgram) return;
-
-    console.log(`Programa seleccionado: ${selectedProgram.name}`);
-
-    setProgram(selectedProgram); // Almacenar el programa seleccionado
-    setSelectedProgram(null);
-    navigate(`/program/${selectedProgram.id}`);
+  const handleDeleteProgram = (id:number) => {
+    // console.log(id);
+    deleteProgram(id);
   };
-
-  const closeModal = () => {
-    setSelectedProgram(null);
-  };
-
+  
+ 
   return {
-    handleCreateProgram,
-    handleProgramClick,
-    handleConfirmation,
-    closeModal,
-    selectedProgram,
-    nameRef,
-    durationRef,
-    query,
+    handleSubmit,
+    handleDeleteProgram,
+    handleChangeFile,
+    
+    isLoading,
+    isError,
+    programs,
+    error,
+    hosts,
+    fileList
   };
 };
