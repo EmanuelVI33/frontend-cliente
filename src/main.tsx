@@ -4,12 +4,12 @@ import esES from "antd/locale/es_ES";
 import { ConfigProvider } from "antd";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-import "./index.css";
 
 import App from "./App.tsx";
 import { ProgrammingProvider } from "./Page/Programming/context/ProgrammingContext.tsx";
 import { ScriptProvider } from "./Page/Script/context/ScriptContext.tsx";
 import { ProgramProvider } from "./Page/Program/context/ProgramContext.tsx";
+
 
 const queryClient = new QueryClient();
 

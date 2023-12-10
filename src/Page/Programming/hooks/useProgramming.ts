@@ -1,5 +1,9 @@
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import dayjs, { Dayjs } from "dayjs";
+
+import { QueryResult } from "@/interfaces";
+
 
 import { useCreateProgrammingMutation, useDeleteProgrammingMutation, useProgrammingQuery, useUpdateProgrammingMutation } from ".";
 import { useHostQuery } from "@/hooks/useHostQuery";
@@ -21,6 +25,7 @@ export const useProgramming = () => {
   const { isAdd,closeModal  } = useFormModal();
 
   console.log(`Lista de programming: ${programming}`);
+
 
   const handleSubmit = (value:any) => {
     
@@ -54,5 +59,6 @@ export const useProgramming = () => {
     error,
     handleSubmit,
     handleDeleteProgramming,
+
   };
 };

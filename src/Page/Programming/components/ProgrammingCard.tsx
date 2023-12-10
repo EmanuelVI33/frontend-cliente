@@ -1,13 +1,24 @@
-import React from "react";
+
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+
+import {
+  DeleteOutlined,
+  ExclamationCircleOutlined,
+  PlayCircleOutlined,
+} from "@ant-design/icons";
 import { Button, List, Modal } from "antd";
-import { DeleteOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
+
 import { EditOutlined } from "@mui/icons-material";
 
 import { ProgrammingModel } from "../model/ProgrammingModel";
 import { useFormModal } from "../context";
-import { useScriptContext } from "@/Page/Script/hooks";
+
 import { useProgramming } from "../hooks";
+import { usePlayer, useScriptContext } from "@/Page/Script/hooks";
+import FlexRow from "../style/FlexRow";
+import { ProgrammingPlayer } from ".";
+
 
 interface ProgrammingCardProps {
   item: ProgrammingModel;
@@ -15,9 +26,18 @@ interface ProgrammingCardProps {
 
 const ProgrammingCard: React.FC<ProgrammingCardProps> = ({ item }) => {
   const [modal, contextHolder] = Modal.useModal();
+  const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const { handleScript } = useScriptContext();
   const { setEditValues } = useFormModal();
+
   const { handleDeleteProgramming } = useProgramming();
+
+  const playlist = item.elements;
+
+  const { handlePlay } = usePlayer({
+    playlist,
+  });
+
 
   const navigate = useNavigate();
 
@@ -35,7 +55,14 @@ const ProgrammingCard: React.FC<ProgrammingCardProps> = ({ item }) => {
     setEditValues(item);
   };
 
+
   // console.log(item);
+
+  const handleCloseModal = () => {
+    setIsPlaying(false);
+    handlePlay(false);
+  };
+
   return (
     <>
       {contextHolder}
@@ -49,7 +76,20 @@ const ProgrammingCard: React.FC<ProgrammingCardProps> = ({ item }) => {
             onClick={handleDelete}
           />,
         ]}
-        extra={<img width={200} alt={item.title} src={item.photoUrl} />}
+        // extra={<img width={200} alt={item.title} src={item.photoUrl} />}
+        extra={
+          <FlexRow>
+            <img
+              width={180}
+              alt={item.title}
+              className="mr-4"
+              src={item.photoUrl}
+            />
+            <Button type="primary" onClick={() => setIsPlaying(true)}>
+              <PlayCircleOutlined width={200} />
+            </Button>
+          </FlexRow>
+        }
         style={{ cursor: "pointer" }}
       >
         <div
@@ -67,6 +107,15 @@ const ProgrammingCard: React.FC<ProgrammingCardProps> = ({ item }) => {
         <p>Tiempo de Inicio: {item.startTime}</p>
         <p>Duración: {item.duration}</p>
       </List.Item>
+
+      <Modal
+        title={"Reproductor"}
+        open={isPlaying}
+        onCancel={handleCloseModal}
+        footer={null}
+      >
+        <ProgrammingPlayer playlist={playlist} />
+      </Modal>
     </>
   );
 };
