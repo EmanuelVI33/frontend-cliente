@@ -2,11 +2,17 @@ import { usePlayer } from "@/Page/Script/hooks";
 import { Button } from "antd";
 import styled from "styled-components";
 
-const ContainderPlayer = styled.div`
+const ContainerPlayer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: 1rem;
+`;
+
+const ContainerButton = styled.div`
+  display: flex;
+  justify-content: center;
   gap: 1rem;
 `;
 
@@ -27,8 +33,15 @@ export function ProgrammingPlayer({ playlist = [] }: { playlist: string[] }) {
     handlePlay(true);
   };
 
+  const handlePause = async () => {
+    handlePlay(false);
+    if (videoRef.current) {
+      videoRef.current.pause();
+    }
+  };
+
   return (
-    <ContainderPlayer>
+    <ContainerPlayer>
       <video
         ref={videoRef}
         width="320"
@@ -54,10 +67,15 @@ export function ProgrammingPlayer({ playlist = [] }: { playlist: string[] }) {
           type="video/mp4"
         />
       </video>
-      <Button type="primary" onClick={handlePlayVideo}>
-        Reproducir
-      </Button>
-    </ContainderPlayer>
+      <ContainerButton>
+        <Button type="primary" onClick={handlePlayVideo}>
+          Reproducir
+        </Button>
+        <Button type="primary" onClick={handlePause}>
+          Pausar
+        </Button>
+      </ContainerButton>
+    </ContainerPlayer>
   );
 }
 
