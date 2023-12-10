@@ -1,21 +1,32 @@
-import React from "react";
-import { DeleteOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
+import React, { useState } from "react";
+import {
+  DeleteOutlined,
+  ExclamationCircleOutlined,
+  PlayCircleOutlined,
+} from "@ant-design/icons";
 import { Button, List, Modal } from "antd";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { EditOutlined } from "@mui/icons-material";
 import { ProgrammingModel } from "../model/ProgrammingModel";
 import { useFormModal } from "../context";
-import { useScriptContext } from "@/Page/Script/hooks";
+import { usePlayer, useScriptContext } from "@/Page/Script/hooks";
+import FlexRow from "../style/FlexRow";
+import { ProgrammingPlayer } from ".";
 
 interface ProgrammingCardProps {
   item: ProgrammingModel;
 }
 
 const ProgrammingCard: React.FC<ProgrammingCardProps> = ({ item }) => {
-  const { id } = useParams();
   const [modal, contextHolder] = Modal.useModal();
+  const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const { handleScript } = useScriptContext();
   const { setEditValues } = useFormModal();
+  const playlist = item.elements;
+
+  const { handlePlay } = usePlayer({
+    playlist,
+  });
 
   const navigate = useNavigate();
 
@@ -30,6 +41,11 @@ const ProgrammingCard: React.FC<ProgrammingCardProps> = ({ item }) => {
 
   const handleEdit = () => {
     setEditValues(item);
+  };
+
+  const handleCloseModal = () => {
+    setIsPlaying(false);
+    handlePlay(false);
   };
 
   return (
@@ -47,11 +63,17 @@ const ProgrammingCard: React.FC<ProgrammingCardProps> = ({ item }) => {
         ]}
         // extra={<img width={200} alt={item.title} src={item.presenter} />}
         extra={
-          <img
-            width={200}
-            alt={item.title}
-            src="https://create-images-results.d-id.com/DefaultPresenters/Toman_f_ai/image.jpeg"
-          />
+          <FlexRow>
+            <img
+              width={180}
+              alt={item.title}
+              className="mr-4"
+              src="https://create-images-results.d-id.com/DefaultPresenters/Toman_f_ai/image.jpeg"
+            />
+            <Button type="primary" onClick={() => setIsPlaying(true)}>
+              <PlayCircleOutlined width={200} />
+            </Button>
+          </FlexRow>
         }
         style={{ cursor: "pointer" }}
       >
@@ -70,6 +92,15 @@ const ProgrammingCard: React.FC<ProgrammingCardProps> = ({ item }) => {
         <p>Tiempo de Inicio: {item.startTime}</p>
         <p>Duración: {item.duration}</p>
       </List.Item>
+
+      <Modal
+        title={"Reproductor"}
+        open={isPlaying}
+        onCancel={handleCloseModal}
+        footer={null}
+      >
+        <ProgrammingPlayer playlist={playlist} />
+      </Modal>
     </>
   );
 };

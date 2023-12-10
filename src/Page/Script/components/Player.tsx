@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { useScriptContext } from "../hooks";
 import { ElementFactory, ElementModel } from "../model";
-import { UseQueryResult } from "@tanstack/react-query";
+import { QueryResult } from "@/interfaces";
 
 const PlayerContainer = styled.div`
   grid-column: 2 / 3;
@@ -25,7 +25,7 @@ const FullWidthHeightVideo = styled.video`
   // object-fit: cover; /* Esto asegura que el video cubra completamente el contenedor */
 `;
 
-const Player = ({ query }: { query: UseQueryResult<any, Error> }) => {
+const Player = ({ query }: { query: QueryResult }) => {
   const { data, isLoading, isError } = query;
   const { selectedElement } = useScriptContext();
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -42,6 +42,7 @@ const Player = ({ query }: { query: UseQueryResult<any, Error> }) => {
   }, [data]);
 
   useEffect(() => {
+    console.log(`Se modifico una propiedad`);
     const initializeVideo = async () => {
       if (playlist.length > 0 && videoRef.current) {
         try {

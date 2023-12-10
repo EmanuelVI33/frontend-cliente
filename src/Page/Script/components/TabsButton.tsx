@@ -1,24 +1,7 @@
-import styled from "styled-components";
 import { FC } from "react";
 import { useScript, useScriptContext } from "../hooks";
 import { ElementEnum } from "../model";
 import { Tabs } from "antd";
-
-const TabsContainer = styled.div`
-  display: flex;
-  margin-bottom: 16px;
-`;
-
-const TabButton = styled.button<{ $isActive: boolean }>`
-  padding: 8px 16px;
-  margin-right: 16px;
-  font-size: 16px;
-  cursor: pointer;
-  background-color: ${(props) => (props.$isActive ? "#007bff" : "transparent")};
-  color: ${(props) => (props.$isActive ? "#fff" : "#000")};
-  border: none;
-  outline: none;
-`;
 
 interface TabsButtonProps {
   etiquetas: ElementEnum[];
