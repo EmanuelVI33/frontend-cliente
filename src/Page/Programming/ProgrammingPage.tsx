@@ -12,7 +12,6 @@ import { ProgrammingModel } from "./model/ProgrammingModel";
 import HostModal from "@/Components/HostModal";
 
 const ProgrammingPage: React.FC = () => {
-
   const {
     isAdd,
     isModalOpen,
@@ -23,7 +22,6 @@ const ProgrammingPage: React.FC = () => {
   } = useFormModal();
   const { programming } = useProgramming();
   const { getStorageProgram } = useProgramContext();
-
 
   return (
     <>
@@ -71,7 +69,7 @@ const ProgrammingPage: React.FC = () => {
       <Modal
         title={isAdd ? "Crear Nueva Programación" : "Editar Programación"}
         open={isModalOpen}
-        onCancel={handleCloseModal}
+        onCancel={closeModal}
         footer={null}
         width={650}
       >

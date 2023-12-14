@@ -47,7 +47,8 @@ export const useFormElement = ({
     Object.entries(formData).forEach(([key, value]) => {
       if (value instanceof File) {
         // Si es un archivo, agrégalo directamente al FormData
-        form.append(key, value);
+        console.log("form -----", value);
+        form.append("file", value as Blob);
       } else {
         // Si es un campo de texto, conviértelo a cadena y agrégalo al FormData
         form.append(key, String(value));
@@ -59,6 +60,7 @@ export const useFormElement = ({
     form.append("index", String(data.length)); // Agregar index
     form.append("programmingId", String(script));
 
+    console.log("form: ", JSON.stringify(form));
     // Enviar el form
     createNewElement(form);
   };
