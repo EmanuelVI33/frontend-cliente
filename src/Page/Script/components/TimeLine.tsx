@@ -20,6 +20,8 @@ export function TimeLine({ query }: { query: QueryResult }) {
 
   if (isLoading) return <p>Cargando...</p>;
 
+  // console.log("dta-------", data);
+
   // Recorrer para crear la instancia correspondiente
   const elements = data.map(ElementFactory.createElement);
 

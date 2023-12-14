@@ -1,11 +1,12 @@
 import { axiosClient } from "@/constant";
 import { ProgramModel } from "@/Page/Program/model";
 
-export const createProgram = async (formData:FormData) => {
+export const createProgram = async (formData: FormData) => {
+  console.log("creating program");
   try {
-    const response = await axiosClient.post("/program", formData,{
+    const response = await axiosClient.post("/program", formData, {
       headers: {
-        'Content-Type': 'multipart/form-data',
+        "Content-Type": "multipart/form-data",
       },
     });
     return response.data;

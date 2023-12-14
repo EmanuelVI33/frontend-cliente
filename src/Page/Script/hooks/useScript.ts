@@ -11,6 +11,7 @@ export const useScript = ({ id }: { id: string | undefined }) => {
   } = useScriptContext();
 
   const query = useElementQuery(id);
+  console.log("query -------", query.data);
 
   return {
     query,

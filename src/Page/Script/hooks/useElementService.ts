@@ -21,7 +21,7 @@ export const useElementMutation = () => {
 export const useElementQuery = (id: string | undefined) => {
   return useQuery({
     queryKey: [key],
-    queryFn: () => getElementsByProgramming(id),
+    queryFn: () => getElementsByProgramming(id!),
   });
 };
 

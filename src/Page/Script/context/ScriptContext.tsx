@@ -11,6 +11,7 @@ interface ScriptContextProps {
   script: string | null;
   setFormData: (data: ElementOptions) => void;
   setFormType: (formType: number) => void;
+  setSelectedElement: (element: ElementModel) => void;
   handleSelectElement: (selectedElement: ElementModel | null) => void;
   handleScript: (id: string | null) => void;
   handleChangeTab: (newType: number) => void;
@@ -37,7 +38,6 @@ const ScriptProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
   useEffect(() => {
     console.log(`${formData}`);
-
     // Vaciar formulario si se cambia de formulario
     setFormData({});
   }, [formType]);
@@ -70,6 +70,7 @@ const ScriptProvider: FC<{ children: ReactNode }> = ({ children }) => {
         handleSelectElement,
         handleScript,
         handleChangeTab,
+        setSelectedElement,
         // query,
       }}
     >
